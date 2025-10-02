@@ -1,0 +1,110 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Collecting git+https://github.com/jeromerony/distorch.git
+  Cloning https://github.com/jeromerony/distorch.git to /gpfs/scratch1/nodespecific/gcn15/scur1049.15074496/pip-req-build-yrzilzh2
+  Running command git clone --filter=blob:none --quiet https://github.com/jeromerony/distorch.git /gpfs/scratch1/nodespecific/gcn15/scur1049.15074496/pip-req-build-yrzilzh2
+  Resolved https://github.com/jeromerony/distorch.git to commit 80f190cb46632b1f05dc1a608f6b368f89dbcea2
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: torch>=2.0 in /home/scur1049/.local/lib/python3.11/site-packages (from distorch==0.1.2) (2.8.0)
+Requirement already satisfied: filelock in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.19.1)
+Requirement already satisfied: typing-extensions>=4.10.0 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (4.15.0)
+Requirement already satisfied: sympy>=1.13.3 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (1.14.0)
+Requirement already satisfied: networkx in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.5)
+Requirement already satisfied: jinja2 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.1.6)
+Requirement already satisfied: fsspec in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (2025.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.3 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (2.27.3)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (1.13.1.3)
+Requirement already satisfied: triton==3.4.0 in /home/scur1049/.local/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.4.0)
+Requirement already satisfied: setuptools>=40.8.0 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from triton==3.4.0->torch>=2.0->distorch==0.1.2) (78.1.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from sympy>=1.13.3->torch>=2.0->distorch==0.1.2) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from jinja2->torch>=2.0->distorch==0.1.2) (3.0.3)
+Building wheels for collected packages: distorch
+  Building wheel for distorch (pyproject.toml): started
+  Building wheel for distorch (pyproject.toml): finished with status 'done'
+  Created wheel for distorch: filename=distorch-0.1.2-py3-none-any.whl size=15476 sha256=a3d96d3e52cefff586031ec08f19b5f7facfee9f94733de09b5ed618f2a1fb57
+  Stored in directory: /gpfs/scratch1/nodespecific/gcn15/scur1049.15074496/pip-ephem-wheel-cache-umal8rh0/wheels/ee/6c/37/c2e6a267bb9b0effce4023658af038d2f611ccb4e7d068f930
+Successfully built distorch
+Installing collected packages: distorch
+Successfully installed distorch-0.1.2
+{'background_class': 0,
+ 'chill': False,
+ 'cpu': False,
+ 'crop': False,
+ 'ignored_classes': None,
+ 'metrics': ['3d_dice',
+             '3d_hd95',
+             '3d_hd',
+             '3d_assd',
+             '3d_nsd',
+             '3d_jaccard',
+             'pixel_accuracy',
+             'confusion_matrix'],
+ 'num_classes': 5,
+ 'num_workers': 9,
+ 'overwrite': True,
+ 'pred_extension': '.nii.gz',
+ 'pred_folder': PosixPath('data/seghtor_predictions/pred'),
+ 'ref_extension': '.nii.gz',
+ 'ref_folder': PosixPath('data/seghtor_predictions/gt'),
+ 'save_folder': PosixPath('results/metrics_seghtor_val_pred')}
+[34m>>> Initializing Volume dataset with 10 volumes[39m[49m
+>>  data/seghtor_predictions/gt, data/seghtor_predictions/pred
+[32m> All stems found in both folders[39m[49m
+>> Computing:   0%|          | 0/10 [?it/s]>> Computing:   0%|          | 0/10 [?it/s, batch_shape=[1, 512, 512, 229], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  10%|█         | 1/10 [ 3.38s/it, batch_shape=[1, 512, 512, 229], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  10%|█         | 1/10 [ 3.38s/it, batch_shape=[1, 512, 512, 246], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  20%|██        | 2/10 [ 1.57s/it, batch_shape=[1, 512, 512, 246], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  20%|██        | 2/10 [ 1.57s/it, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  30%|███       | 3/10 [ 1.01s/it, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  30%|███       | 3/10 [ 1.01s/it, batch_shape=[1, 512, 512, 166], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  40%|████      | 4/10 [ 1.41it/s, batch_shape=[1, 512, 512, 166], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  40%|████      | 4/10 [ 1.41it/s, batch_shape=[1, 512, 512, 158], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  50%|█████     | 5/10 [ 1.84it/s, batch_shape=[1, 512, 512, 158], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  50%|█████     | 5/10 [ 1.84it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  60%|██████    | 6/10 [ 2.28it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  60%|██████    | 6/10 [ 2.28it/s, batch_shape=[1, 512, 512, 179], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  70%|███████   | 7/10 [ 2.41it/s, batch_shape=[1, 512, 512, 179], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  70%|███████   | 7/10 [ 2.41it/s, batch_shape=[1, 512, 512, 171], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  80%|████████  | 8/10 [ 2.65it/s, batch_shape=[1, 512, 512, 171], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  80%|████████  | 8/10 [ 2.65it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['1.367', '1.367', '2.000']]>> Computing:  90%|█████████ | 9/10 [ 3.05it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['1.367', '1.367', '2.000']]>> Computing:  90%|█████████ | 9/10 [ 3.05it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing: 100%|██████████| 10/10 [ 3.15it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]                                                                                                                          >>> data/seghtor_predictions/pred
+3d_dice [0.9982778  0.37655538 0.801819   0.7447993  0.6983909 ]
+3d_hd95 [ 2.0933368 33.637882  13.450671  11.125059  29.810297 ]
+3d_hd [ 47.21625  120.39746   42.11941   31.376568  79.314575]
+3d_assd [ 0.36971185 17.164412    5.9090567   2.764401    6.0836053 ]
+3d_nsd [0.9447729  0.26242632 0.31500107 0.60677236 0.4040273 ]
+3d_jaccard [0.9965642  0.24978785 0.70361304 0.602811   0.55042326]
+Traceback (most recent call last):
+  File "/gpfs/home3/scur1049/ai4mi_project_group8/compute_metrics.py", line 354, in <module>
+    main()
+  File "/gpfs/home3/scur1049/ai4mi_project_group8/compute_metrics.py", line 338, in main
+    assert (ss := stacked.shape) == (len(stems), K), (ss, key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ((10, 1, 5), 'pixel_accuracy')
+
+JOB STATISTICS
+==============
+Job ID: 15074496
+Cluster: snellius
+User/Group: scur1049/scur1049
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:24
+CPU Efficiency: 4.30% of 00:09:18 core-walltime
+Job Wall-clock time: 00:00:31
+Memory Utilized: 4.84 MB
+Memory Efficiency: 0.06% of 8.00 GB (8.00 GB/node)
