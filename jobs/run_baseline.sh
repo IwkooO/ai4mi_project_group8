@@ -1,6 +1,7 @@
 #!/bin/bash
 
 MODEL_NAME="segthor_baseline"
+DATA_NAME="SEGTHOR_CLEAN"
 
 jobs=(
 #   "jobs/install_env.job"
@@ -20,12 +21,12 @@ prev_jid=""
 
 for job in "${jobs[@]}"; do
     if [[ -z "$prev_jid" ]]; then
-        # First job: submit normally with MODEL_NAME exported
-        jid=$(sbatch --export=ALL,MODEL_NAME=$MODEL_NAME "$job" | awk '{print $4}')
+        jid=$(sbatch --export=ALL,MODEL_NAME=$MODEL_NAME,DATA_NAME=$DATA_NAME "$job" | awk '{print $4}')
     else
-        # Dependent jobs: wait for previous to finish successfully
-        jid=$(sbatch --dependency=afterok:$prev_jid --export=ALL,MODEL_NAME=$MODEL_NAME "$job" | awk '{print $4}')
+        jid=$(sbatch --dependency=afterok:$prev_jid --export=ALL,MODEL_NAME=$MODEL_NAME,DATA_NAME=$DATA_NAME "$job" | awk '{print $4}')
     fi
-    echo "Submitted $job as job $jid (MODEL_NAME=$MODEL_NAME)"
+    echo "Submitted $job as job $jid (MODEL_NAME=$MODEL_NAME, DATA_NAME=$DATA_NAME)"
     prev_jid=$jid
 done
+
+echo "All jobs submitted."

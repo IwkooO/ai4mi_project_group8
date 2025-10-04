@@ -18,6 +18,6 @@ cd ~/ai4mi_project_group8
 
 source activate ai4mi
 
-python -O main.py --dataset SEGTHOR_CLEAN --mode full --epochs 25 --dest results/$MODEL_NAME --gpu
+python -O main.py --dataset $DATA_NAME --mode full --epochs 25 --dest results/$MODEL_NAME --gpu
 
-echo "Training complete for $MODEL_NAME"
+echo "Training complete for $MODEL_NAME on dataset $DATA_NAME"
