@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --job-name=inspect_metrics
+#SBATCH --time=00:10:00
+#SBATCH --output=./slurm_out/inspect_metrics.out
+
+set -e
+
+module purge
+module load 2024
+module load Miniconda3/24.7.1-0
+module load CUDA/12.6.0
+
+source activate ai4mi311
+
+cd ~/ai4mi_project_group8
+
+python <<'EOF'
+import os
+import numpy as np
+
+model_name = os.environ["MODEL_NAME"]
+print(f"Inspecting metrics for model: {model_name}")
+
+metrics = ["3d_dice", "3d_hd95", "3d_hd", "3d_assd", "3d_nsd", "3d_jaccard"]
+
+for metric in metrics:
+    fname = f"results/{model_name}/metrics/{metric}.npz"
+    print(f"\nInspecting {fname}")
+    data = np.load(fname)
+
+    for key in data.keys():
+        arr = data[key]
+        print(f"  {key}: shape={arr.shape}, dtype={arr.dtype}")
+
+        # Compute mean across patients
+        mean_per_class = arr.mean(axis=0)
+        overall_mean = arr.mean()
+
+        print(f"  Mean per class: {mean_per_class}")
+        print(f"  Overall mean: {overall_mean:.4f}")
+EOF

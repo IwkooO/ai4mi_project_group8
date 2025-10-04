@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --job-name=create_data
+#SBATCH --time=00:30:00
+#SBATCH --output=./slurm_out/create_clean_dataset.out
+
+#exit if an error occurs
+set -e
+
+module purge
+module load 2024
+module load Miniconda3/24.7.1-0
+module load CUDA/12.6.0
+
+cd ~/ai4mi_project_group8
+
+source activate ai4mi
+
+# unzip segthor
+make data/segthor_train
+
+# fixes heart
+make data/segthor_fixed
+
+# slices data into png
+make data/SEGTHOR_CLEAN CFLAGS=-O
+
+echo "Created clean dataset"
