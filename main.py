@@ -77,11 +77,28 @@ def gt_transform(K, img):
         img = class2one_hot(img, K=K)
         return img[0]
 
+def worker_init_fn(worker_id):
+    """Initialize worker with deterministic seed for reproducibility"""
+    np.random.seed(torch.initial_seed() % 2**32)
+
 def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
+    # Set random seeds for reproducibility
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(args.seed)
+        torch.cuda.manual_seed_all(args.seed)
+    
+    # Enable deterministic behavior for reproducibility
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.use_deterministic_algorithms(True, warn_only=True)
+    
     # Networks and scheduler
     gpu: bool = args.gpu and torch.cuda.is_available()
     device = torch.device("cuda") if gpu else torch.device("cpu")
     print(f">> Picked {device} to run experiments")
+    print(f">> Using random seed: {args.seed}")
 
     K: int = datasets_params[args.dataset]['K']
     kernels: int = datasets_params[args.dataset]['kernels'] if 'kernels' in datasets_params[args.dataset] else 8
@@ -107,7 +124,9 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     train_loader = DataLoader(train_set,
                               batch_size=B,
                               num_workers=5,
-                              shuffle=True)
+                              shuffle=True,
+                              worker_init_fn=worker_init_fn,
+                              generator=torch.Generator().manual_seed(args.seed))
 
     val_set = SliceDataset('val',
                            root_dir,
@@ -117,7 +136,9 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     val_loader = DataLoader(val_set,
                             batch_size=B,
                             num_workers=5,
-                            shuffle=False)
+                            shuffle=False,
+                            worker_init_fn=worker_init_fn,
+                            generator=torch.Generator().manual_seed(args.seed))
 
     args.dest.mkdir(parents=True, exist_ok=True)
 
@@ -242,6 +263,8 @@ def main():
                         help="Destination directory to save the results (predictions and weights).")
 
     parser.add_argument('--gpu', action='store_true')
+    parser.add_argument('--seed', type=int, default=42, 
+                        help="Random seed for reproducibility")
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logics around epochs and logging easily.")

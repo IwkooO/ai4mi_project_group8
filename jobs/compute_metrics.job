@@ -26,3 +26,7 @@ python compute_metrics.py \
   --metrics 3d_dice 3d_hd95 3d_hd 3d_assd 3d_nsd 3d_jaccard confusion_matrix \
   --save_folder results/metrics_seghtor_val_pred \
   --overwrite
+
+
+  # --ref_folder data/seghtor_predictions/gt \
+  # --pred_folder data/seghtor_predictions/pred \
