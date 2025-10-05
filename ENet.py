@@ -27,6 +27,119 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch import Tensor
 
+### EXTENSION
+class OverlapPatchEmbed(nn.Module):
+        def __init__(self,c_in,embed_dim,patch=4,stride=4,pad=0):
+                super().__init__()
+                self.proj = nn.Conv2d(c_in,embed_dim,kernel_size=patch,stride=stride,padding=pad)
+                self.norm = nn.LayerNorm(embed_dim)
+
+        def forward(self, x: Tensor) -> Tensor:
+                x = self.proj(x) # B C H W -> B C H' W'
+                _, _, H, W = x.shape
+                x = x.flatten(2).transpose(1, 2) # B C H W -> B C HW -> B HW C
+                x = self.norm(x), (H, W)
+                return x
+
+class MixFFN(nn.Module):
+    def __init__(self, dim, mlp_ratio=4):
+        super().__init__()
+        hid = int(dim * mlp_ratio)
+        self.fc1 = nn.Linear(dim, hid)
+        self.dw  = nn.Conv2d(hid, hid, 3, padding=1, groups=hid)
+        self.act = nn.GELU()
+        self.fc2 = nn.Linear(hid, dim)
+
+    def forward(self, x, H, W):
+        B, N, C = x.shape
+        x = self.fc1(x)
+        x = x.transpose(1, 2).reshape(B, -1, H, W)
+        x = self.dw(x)
+        x = self.act(x)
+        x = x.flatten(2).transpose(1, 2)
+        return self.fc2(x)
+
+class MHSASR(nn.Module):
+        """ Multi-Head Self-Attention with Spatial Reduction """
+        def __init__(self,dim,heads=4,sr_ratio=2,dropout=0.0):
+                super().__init__()
+                self.h = heads
+                self.q = nn.Linear(dim,dim)
+                self.kv = nn.Linear(dim,dim*2)
+                self.proj= nn.Linear(dim,dim)
+                self.dropout = nn.Dropout(dropout)
+                self.sr_ratio = sr_ratio
+                if sr_ratio > 1:
+                        # depthwise reduce tokens spatially before making K,V
+                        self.sr = nn.Conv2d(dim, dim, kernel_size=sr_ratio, stride=sr_ratio, groups=dim)
+                        self.norm = nn.LayerNorm(dim)
+        def forward(self, x: Tensor, H: int, W: int) -> Tensor:
+                B, N, C = x.shape
+                d = C // self.h # dimension per head
+                q = self.q(x).reshape(B, N, self.h, d).permute(0, 2, 1, 3) # B N C -> B N h (C/h) -> B h N (C/h)
+        
+                if self.sr_ratio > 1:   
+                        xs = x.transpose(1,2).reshape(B,C,H,W) 
+                        xs = self.sr(xs).flatten(2).transpose(1,2)
+                        xs = self.norm(xs)
+                else:
+                        xs = x
+                kv = self.kv(xs).reshape(B, -1, 2, self.h, d).permute(2, 0, 3, 1, 4) 
+                k, v = kv[0], kv[1] # each: B h N (C/h)
+
+                attn = (q @ k.transpose(-2, -1)) * (d ** -0.5)
+                attn = attn.softmax(dim=-1)
+                attn = self.dropout(attn)
+
+                out = (attn @ v).transpose(1, 2).reshape(B, N, C)
+                out = self.proj(out)
+                return out
+
+class ViTBlock(nn.Module):
+        def __init__(self, dim, heads=4, sr_ratio=2, mlp_ratio=4, dropout=0.0):
+                super().__init__()
+                self.n1 = nn.LayerNorm(dim)
+                self.attn = MHSASR(dim, heads=heads, sr_ratio=sr_ratio, dropout=dropout)
+                self.n2 = nn.LayerNorm(dim)
+                self.ffn = MixFFN(dim, mlp_ratio=mlp_ratio)
+
+        def forward(self, x, H, W):
+                x = x + self.attn(self.n1(x), H, W)
+                x = x + self.ffn(self.n2(x), H, W)
+                return x
+
+class TransformerBottleneck(nn.Module):
+        """Goes into the deepest part of the ENet"""
+        def __init__(self, c_in, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4):
+                super().__init__()
+
+                self.patch = OverlapPatchEmbed(c_in, embed_dim, patch=patch, stride=patch)
+                self.blocks = nn.ModuleList([
+                        ViTBlock(embed_dim, heads=heads, sr_ratio=sr_ratio) for _ in range(depth)
+                ])
+                self.proj_back = nn.Conv2d(embed_dim, c_in, kernel_size=1, bias=False)
+                self.bn = nn.BatchNorm2d(c_in)
+
+                # gated fusion to keep CNN path dominant when needed
+                self.gate = nn.Sequential(
+                        nn.Conv2d(2 * c_in, c_in, kernel_size=1, bias=False),
+                        nn.BatchNorm2d(c_in),
+                        nn.Sigmoid()
+                )
+
+        def forward(self, x):  # x: [B,C,H,W]
+                B, C, H, W = x.shape
+                tok, (h, w) = self.patch(x)                          # [B, h*w, E]
+                for blk in self.blocks:
+                        tok = blk(tok, h, w)
+                feat = tok.transpose(1, 2).reshape(B, -1, h, w)      # [B,E,h,w]
+                feat = F.interpolate(feat, size=(H, W), mode='bilinear', align_corners=False)
+                feat = self.bn(self.proj_back(feat))                 # [B,C,H,W]
+                g = self.gate(torch.cat([x, feat], dim=1))           # [B,C,H,W]
+                return x + g * feat
+
+
+### END EXTENSION
 
 def random_weights_init(m):
         if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
@@ -202,6 +315,8 @@ class ENet(nn.Module):
                                                    BottleNeck(K * 8, K * 8, F, dilation=8),
                                                    BottleNeck(K * 8, K * 8, F, dropoutRate=0.1, asym=True),
                                                    BottleNeck(K * 8, K * 8, F, dilation=16))
+                ### EXTENSION
+                self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4)
 
                 # Middle operations
                 self.bottleneck3 = nn.Sequential(BottleNeck(K * 8, K * 8, F, dropoutRate=0.1),
@@ -238,9 +353,14 @@ class ENet(nn.Module):
                 bn1_out = self.bottleneck1_1(bn1_0)
                 bn2_0, indices_2 = self.bottleneck2_0(bn1_out)
                 bn2_out = self.bottleneck2_1(bn2_0)
+                ### EXTENSION
+                x_mid = self.trans_mid(bn2_out)
+                # Middle operations
+                bn3_out =self.bottleneck3(x_mid)
+                ### END EXTENSION
 
                 # Middle operations
-                bn3_out = self.bottleneck3(bn2_out)
+                #bn3_out = self.bottleneck3(bn2_out)
 
                 # Upsampling half
                 bn4_out = self.bottleneck4((bn3_out, indices_2, bn1_out))
