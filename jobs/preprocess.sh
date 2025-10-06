@@ -17,4 +17,10 @@ source activate ai4mi_env
 
 python -O preprocessing.py
 
+# Copy processed data to new structure
+python -O preprocessing.py \
+    --segthor_clean data/SEGTHOR_CLEAN \
+    --output_dir data/SEGTHOR_PREPROCESSED_WINDOW_GAMMA \
+    --preprocessed_subfolder preprocessed3D_window_gamma
+
 echo "Preprocessing completed."

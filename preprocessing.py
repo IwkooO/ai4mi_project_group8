@@ -1,72 +1,46 @@
 import os
-import cv2
-import numpy as np
-from glob import glob
-from tqdm import tqdm
+import shutil
+from pathlib import Path
+import argparse
 
-# === CONFIG ===
-BASE_DIR = "data/SEGTHOR_CLEAN"
-SETS = ["val"]  # or ["train", "val"]
-INPUT_SUBFOLDER = "img"
-OUTPUT_SUBFOLDER = "preprocessed"
-GAMMA = 0.7
-LOWER_PERCENTILE = 1
-UPPER_PERCENTILE = 99.5
-# ==============
 
-def histogram_normalization(image, lower=1, upper=99):
+def copy_subset(split: str, input_folder: Path, output_folder: Path, preprocessed_subfolder: str):
     """
-    Normalize image based on intensity percentiles.
-    Clips intensities and scales to 0–255 (uint8).
+    Copy GT and selected preprocessed images from SEGTHOR_CLEAN to SEGTHOR_PREPROCESSED.
     """
-    p1 = np.percentile(image, lower)
-    p2 = np.percentile(image, upper)
-    if p2 - p1 == 0:
-        return np.zeros_like(image, dtype=np.uint8)
-    image = np.clip(image, p1, p2)
-    image = (image - p1) / (p2 - p1)
-    return (image * 255).astype(np.uint8)
+    source_split = input_folder / split
+    target_split = output_folder / split
 
-def adjust_gamma(image, gamma=0.8):
-    """
-    Apply gamma correction to enhance mid-tone contrast.
-    """
-    invGamma = 1.0 / gamma
-    table = np.array([(i / 255.0) ** invGamma * 255 for i in range(256)]).astype("uint8")
-    return cv2.LUT(image, table)
+    # Copy GT
+    gt_src = source_split / "gt"
+    gt_dst = target_split / "gt"
+    shutil.copytree(gt_src, gt_dst)
 
-def preprocess_and_save_images(set_name):
-    input_path = os.path.join(BASE_DIR, set_name, INPUT_SUBFOLDER)
-    output_path = os.path.join(BASE_DIR, set_name, OUTPUT_SUBFOLDER)
-    os.makedirs(output_path, exist_ok=True)
+    # Copy selected preprocessed data as 'img'
+    preproc_src = source_split / preprocessed_subfolder
+    preproc_dst = target_split / "img"
+    shutil.copytree(preproc_src, preproc_dst)
 
-    image_paths = sorted(glob(os.path.join(input_path, "*.png")))
+    print(f"Copied {split}: GT from {gt_src} and IMG from {preproc_src} to {target_split}")
 
-    print(f"[{set_name.upper()}] Found {len(image_paths)} images")
-
-    for img_path in tqdm(image_paths, desc=f"Processing {set_name}", unit="img"):
-        filename = os.path.basename(img_path)
-
-        # Read as grayscale float32
-        image = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
-        if image is None:
-            print(f"Failed to read: {img_path}")
-            continue
-
-        image = image.astype(np.float32)
-
-        # Apply histogram normalization and gamma correction
-        image = histogram_normalization(image, LOWER_PERCENTILE, UPPER_PERCENTILE)
-        image = adjust_gamma(image, gamma=GAMMA)
-
-        out_path = os.path.join(output_path, filename)
-        cv2.imwrite(out_path, image)
-
-    print(f"[{set_name.upper()}] Saved processed images to: {output_path}")
 
 def main():
-    for set_name in SETS:
-        preprocess_and_save_images(set_name)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--segthor_clean", type=str, required=True, help="Path to SEGTHOR_CLEAN directory")
+    parser.add_argument("--output_dir", type=str, default="data/SEGTHOR_PREPROCESSED", help="Destination directory")
+    parser.add_argument("--preprocessed_subfolder", type=str, required=True,
+                        help="Name of the subfolder inside train/val to use as img (e.g., 'preprocessed3D_window_gamma')")
+
+    args = parser.parse_args()
+
+    input_folder = Path(args.segthor_clean)
+    output_folder = Path(args.output_dir)
+
+    for split in ["train", "val"]:
+        copy_subset(split, input_folder, output_folder, args.preprocessed_subfolder)
+
+    print(f"Done! Preprocessed dataset available at: {output_folder}")
+
 
 if __name__ == "__main__":
     main()
