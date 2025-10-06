@@ -23,6 +23,21 @@ def gamma_correction(image: np.ndarray, gamma: float = 0.8) -> np.ndarray:
     table = np.array([(i / 255.0) ** invGamma * 255 for i in range(256)]).astype("uint8")
     return cv2.LUT(image, table)
 
+def clahe_2d(image: np.ndarray, clip_limit=2.0, tile_grid_size=(8, 8)) -> np.ndarray:
+    """
+    Applies CLAHE (adaptive histogram equalization) to a 2D uint8 image.
+    """
+    if image.dtype != np.uint8:
+        image = (image * 255).clip(0, 255).astype(np.uint8)  # Convert float [0,1] to uint8
+    clahe = cv2.createCLAHE(clipLimit=clip_limit, tileGridSize=tile_grid_size)
+    return clahe.apply(image)
+
+
+def laplacian_2d(image: np.ndarray) -> np.ndarray:
+    """
+    Applies Laplacian edge detection to a 2D slice.
+    """
+    return cv2.Laplacian(image, ddepth=cv2.CV_8U)
 
 def preprocess_ct_volume(volume: np.ndarray, center: float = 60, width: float = 300, gamma: float = 0.8) -> np.ndarray:
     """
@@ -34,4 +49,24 @@ def preprocess_ct_volume(volume: np.ndarray, center: float = 60, width: float = 
     """
     windowed = windowing_soft_tissue(volume, center=center, width=width)
     corrected = gamma_correction(windowed, gamma=gamma)
-    return corrected
+    
+    # Apply CLAHE slice-by-slice
+    clahe_applied = np.zeros_like(corrected)
+    for z in range(volume.shape[2]):
+        clahe_applied[:, :, z] = clahe_2d(corrected[:, :, z])
+    
+    # Apply Laplacian on CLAHE output
+    laplacian_applied = np.zeros_like(clahe_applied)
+    for z in range(volume.shape[2]):
+        laplacian_applied[:, :, z] = laplacian_2d(clahe_applied[:, :, z])
+    
+    # Blend CLAHE + Laplacian (retain structure + sharpness)
+    blended = np.zeros_like(clahe_applied)
+    for z in range(volume.shape[2]):
+        blended[:, :, z] = cv2.addWeighted(
+            clahe_applied[:, :, z], 0.85,
+            laplacian_applied[:, :, z], 0.15,
+            0
+        )
+
+    return blended
