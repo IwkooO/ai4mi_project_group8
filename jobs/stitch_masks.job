@@ -1,0 +1,23 @@
+#!/bin/bash
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --job-name=stitch_masks
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=8GB
+#SBATCH --time=00:20:00
+#SBATCH --output=out/stitch_masks.log
+
+module load 2023
+module load Anaconda3/2023.07-2
+
+cd $HOME/ai4mi_project_group8/
+source $(conda info --base)/etc/profile.d/conda.sh
+source activate ai4mi_env
+
+python stich.py \
+  --data_folder /home/scur1049/ai4mi_project_group8/results/best_epoch/val \
+  --dest_folder /home/scur1049/ai4mi_project_group8/data/seghtor_predictions/pred \
+  --num_classes 5 \
+  --grp_regex "(Patient_\\d\\d)_\\d\\d\\d\\d" \
+  --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
