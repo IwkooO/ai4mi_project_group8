@@ -34,12 +34,12 @@ class OverlapPatchEmbed(nn.Module):
                 self.proj = nn.Conv2d(c_in,embed_dim,kernel_size=patch,stride=stride,padding=pad)
                 self.norm = nn.LayerNorm(embed_dim)
 
-        def forward(self, x: Tensor):
+        def forward(self, x: Tensor) -> Tensor:
                 x = self.proj(x) # B C H W -> B C H' W'
                 _, _, H, W = x.shape
                 x = x.flatten(2).transpose(1, 2) # B C H W -> B C HW -> B HW C
-                x = self.norm(x)
-                return x, (H, W)
+                x = self.norm(x), (H, W)
+                return x
 
 class MixFFN(nn.Module):
     def __init__(self, dim, mlp_ratio=4):
@@ -95,34 +95,17 @@ class MHSASR(nn.Module):
                 out = self.proj(out)
                 return out
 
-class DropPath(nn.Module):
-    """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
-    def __init__(self, drop_prob=None):
-        super(DropPath, self).__init__()
-        self.drop_prob = drop_prob
-
-    def forward(self, x):
-        if self.drop_prob == 0. or not self.training:
-            return x
-        keep_prob = 1 - self.drop_prob
-        shape = (x.shape[0],) + (1,) * (x.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets
-        random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)
-        random_tensor.floor_()  # binarize
-        output = x.div(keep_prob) * random_tensor
-        return output
-
 class ViTBlock(nn.Module):
-        def __init__(self, dim, heads=4, sr_ratio=2, mlp_ratio=4, dropout=0.0, drop_path=0.1):
+        def __init__(self, dim, heads=4, sr_ratio=2, mlp_ratio=4, dropout=0.0):
                 super().__init__()
                 self.n1 = nn.LayerNorm(dim)
                 self.attn = MHSASR(dim, heads=heads, sr_ratio=sr_ratio, dropout=dropout)
-                self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
                 self.n2 = nn.LayerNorm(dim)
                 self.ffn = MixFFN(dim, mlp_ratio=mlp_ratio)
 
         def forward(self, x, H, W):
-                x = x + self.drop_path(self.attn(self.n1(x), H, W))
-                x = x + self.drop_path(self.ffn(self.n2(x), H, W))
+                x = x + self.attn(self.n1(x), H, W)
+                x = x + self.ffn(self.n2(x), H, W)
                 return x
 
 class TransformerBottleneck(nn.Module):
@@ -153,8 +136,6 @@ class TransformerBottleneck(nn.Module):
                 feat = F.interpolate(feat, size=(H, W), mode='bilinear', align_corners=False)
                 feat = self.bn(self.proj_back(feat))                 # [B,C,H,W]
                 g = self.gate(torch.cat([x, feat], dim=1))           # [B,C,H,W]
-                print(f"Gate min: {g.min().item():.4f}, max: {g.max().item():.4f}, mean: {g.mean().item():.4f}")
-
                 return x + g * feat
 
 
@@ -335,12 +316,6 @@ class ENet(nn.Module):
                                                    BottleNeck(K * 8, K * 8, F, dropoutRate=0.1, asym=True),
                                                    BottleNeck(K * 8, K * 8, F, dilation=16))
                 ### EXTENSION
-                # Adding transformer block also before compression to gather global cues
-                # This is more lightweight than after compression version
-                # self.trans_enc2 = TransformerBottleneck(
-                #         c_in=K*4, embed_dim=128, depth=1, heads=2, sr_ratio=4, patch=4)
-
-                # Main ViT block in the bottleneck
                 self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4)
 
                 # Middle operations
@@ -376,9 +351,6 @@ class ENet(nn.Module):
                 # Downsampling half
                 bn1_0, indices_1 = self.bottleneck1_0(outputInitial)
                 bn1_out = self.bottleneck1_1(bn1_0)
-                ### EXTENSION 
-                #bn1_out = self.trans_enc2(bn1_out)
-                ### END EXTENSION
                 bn2_0, indices_2 = self.bottleneck2_0(bn1_out)
                 bn2_out = self.bottleneck2_1(bn2_0)
                 ### EXTENSION

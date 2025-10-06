@@ -95,34 +95,17 @@ class MHSASR(nn.Module):
                 out = self.proj(out)
                 return out
 
-class DropPath(nn.Module):
-    """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
-    def __init__(self, drop_prob=None):
-        super(DropPath, self).__init__()
-        self.drop_prob = drop_prob
-
-    def forward(self, x):
-        if self.drop_prob == 0. or not self.training:
-            return x
-        keep_prob = 1 - self.drop_prob
-        shape = (x.shape[0],) + (1,) * (x.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets
-        random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)
-        random_tensor.floor_()  # binarize
-        output = x.div(keep_prob) * random_tensor
-        return output
-
 class ViTBlock(nn.Module):
-        def __init__(self, dim, heads=4, sr_ratio=2, mlp_ratio=4, dropout=0.0, drop_path=0.1):
+        def __init__(self, dim, heads=4, sr_ratio=2, mlp_ratio=4, dropout=0.0):
                 super().__init__()
                 self.n1 = nn.LayerNorm(dim)
                 self.attn = MHSASR(dim, heads=heads, sr_ratio=sr_ratio, dropout=dropout)
-                self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
                 self.n2 = nn.LayerNorm(dim)
                 self.ffn = MixFFN(dim, mlp_ratio=mlp_ratio)
 
         def forward(self, x, H, W):
-                x = x + self.drop_path(self.attn(self.n1(x), H, W))
-                x = x + self.drop_path(self.ffn(self.n2(x), H, W))
+                x = x + self.attn(self.n1(x), H, W)
+                x = x + self.ffn(self.n2(x), H, W)
                 return x
 
 class TransformerBottleneck(nn.Module):
