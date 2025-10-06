@@ -1,0 +1,223 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Inspecting metrics for model: segthor_aug
+
+Inspecting results/segthor_aug/metrics/3d_dice.npz
+  Patient_01: shape=(5,), dtype=float32
+  Mean per class: 0.8565241098403931
+  Overall mean: 0.8565
+  Patient_02: shape=(5,), dtype=float32
+  Mean per class: 0.7370703816413879
+  Overall mean: 0.7371
+  Patient_13: shape=(5,), dtype=float32
+  Mean per class: 0.8254883885383606
+  Overall mean: 0.8255
+  Patient_16: shape=(5,), dtype=float32
+  Mean per class: 0.7897086143493652
+  Overall mean: 0.7897
+  Patient_21: shape=(5,), dtype=float32
+  Mean per class: 0.7307224273681641
+  Overall mean: 0.7307
+  Patient_22: shape=(5,), dtype=float32
+  Mean per class: 0.7411587238311768
+  Overall mean: 0.7412
+  Patient_28: shape=(5,), dtype=float32
+  Mean per class: 0.6593245267868042
+  Overall mean: 0.6593
+  Patient_30: shape=(5,), dtype=float32
+  Mean per class: 0.7026618719100952
+  Overall mean: 0.7027
+  Patient_35: shape=(5,), dtype=float32
+  Mean per class: 0.5045639276504517
+  Overall mean: 0.5046
+  Patient_39: shape=(5,), dtype=float32
+  Mean per class: 0.8385273218154907
+  Overall mean: 0.8385
+
+Inspecting results/segthor_aug/metrics/3d_hd95.npz
+  Patient_01: shape=(5,), dtype=float32
+  Mean per class: 8.034461975097656
+  Overall mean: 8.0345
+  Patient_02: shape=(5,), dtype=float32
+  Mean per class: 18.45825958251953
+  Overall mean: 18.4583
+  Patient_13: shape=(5,), dtype=float32
+  Mean per class: 11.442644119262695
+  Overall mean: 11.4426
+  Patient_16: shape=(5,), dtype=float32
+  Mean per class: 16.334877014160156
+  Overall mean: 16.3349
+  Patient_21: shape=(5,), dtype=float32
+  Mean per class: 21.407333374023438
+  Overall mean: 21.4073
+  Patient_22: shape=(5,), dtype=float32
+  Mean per class: 56.12584686279297
+  Overall mean: 56.1258
+  Patient_28: shape=(5,), dtype=float32
+  Mean per class: 35.43334197998047
+  Overall mean: 35.4333
+  Patient_30: shape=(5,), dtype=float32
+  Mean per class: 41.760128021240234
+  Overall mean: 41.7601
+  Patient_35: shape=(5,), dtype=float32
+  Mean per class: 28.141220092773438
+  Overall mean: 28.1412
+  Patient_39: shape=(5,), dtype=float32
+  Mean per class: 11.531167030334473
+  Overall mean: 11.5312
+
+Inspecting results/segthor_aug/metrics/3d_hd.npz
+  Patient_01: shape=(5,), dtype=float32
+  Mean per class: 49.35337448120117
+  Overall mean: 49.3534
+  Patient_02: shape=(5,), dtype=float32
+  Mean per class: 44.722713470458984
+  Overall mean: 44.7227
+  Patient_13: shape=(5,), dtype=float32
+  Mean per class: 35.71432113647461
+  Overall mean: 35.7143
+  Patient_16: shape=(5,), dtype=float32
+  Mean per class: 44.154117584228516
+  Overall mean: 44.1541
+  Patient_21: shape=(5,), dtype=float32
+  Mean per class: 47.264434814453125
+  Overall mean: 47.2644
+  Patient_22: shape=(5,), dtype=float32
+  Mean per class: 126.8631362915039
+  Overall mean: 126.8631
+  Patient_28: shape=(5,), dtype=float32
+  Mean per class: 100.95692443847656
+  Overall mean: 100.9569
+  Patient_30: shape=(5,), dtype=float32
+  Mean per class: 104.24757385253906
+  Overall mean: 104.2476
+  Patient_35: shape=(5,), dtype=float32
+  Mean per class: 58.392555236816406
+  Overall mean: 58.3926
+  Patient_39: shape=(5,), dtype=float32
+  Mean per class: 56.65659713745117
+  Overall mean: 56.6566
+
+Inspecting results/segthor_aug/metrics/3d_assd.npz
+  Patient_01: shape=(5,), dtype=float32
+  Mean per class: 1.8230705261230469
+  Overall mean: 1.8231
+  Patient_02: shape=(5,), dtype=float32
+  Mean per class: 11.097047805786133
+  Overall mean: 11.0970
+  Patient_13: shape=(5,), dtype=float32
+  Mean per class: 3.0719528198242188
+  Overall mean: 3.0720
+  Patient_16: shape=(5,), dtype=float32
+  Mean per class: 4.247757911682129
+  Overall mean: 4.2478
+  Patient_21: shape=(5,), dtype=float32
+  Mean per class: 9.034528732299805
+  Overall mean: 9.0345
+  Patient_22: shape=(5,), dtype=float32
+  Mean per class: 12.080680847167969
+  Overall mean: 12.0807
+  Patient_28: shape=(5,), dtype=float32
+  Mean per class: 11.00454044342041
+  Overall mean: 11.0045
+  Patient_30: shape=(5,), dtype=float32
+  Mean per class: 12.424273490905762
+  Overall mean: 12.4243
+  Patient_35: shape=(5,), dtype=float32
+  Mean per class: 12.17990493774414
+  Overall mean: 12.1799
+  Patient_39: shape=(5,), dtype=float32
+  Mean per class: 2.8852896690368652
+  Overall mean: 2.8853
+
+Inspecting results/segthor_aug/metrics/3d_nsd.npz
+  Patient_01: shape=(5,), dtype=float32
+  Mean per class: 0.6638982892036438
+  Overall mean: 0.6639
+  Patient_02: shape=(5,), dtype=float32
+  Mean per class: 0.5309785604476929
+  Overall mean: 0.5310
+  Patient_13: shape=(5,), dtype=float32
+  Mean per class: 0.6349503397941589
+  Overall mean: 0.6350
+  Patient_16: shape=(5,), dtype=float32
+  Mean per class: 0.5902220010757446
+  Overall mean: 0.5902
+  Patient_21: shape=(5,), dtype=float32
+  Mean per class: 0.5460103750228882
+  Overall mean: 0.5460
+  Patient_22: shape=(5,), dtype=float32
+  Mean per class: 0.5489025115966797
+  Overall mean: 0.5489
+  Patient_28: shape=(5,), dtype=float32
+  Mean per class: 0.4566230773925781
+  Overall mean: 0.4566
+  Patient_30: shape=(5,), dtype=float32
+  Mean per class: 0.46231192350387573
+  Overall mean: 0.4623
+  Patient_35: shape=(5,), dtype=float32
+  Mean per class: 0.30568718910217285
+  Overall mean: 0.3057
+  Patient_39: shape=(5,), dtype=float32
+  Mean per class: 0.6656244993209839
+  Overall mean: 0.6656
+
+Inspecting results/segthor_aug/metrics/3d_jaccard.npz
+  Patient_01: shape=(5,), dtype=float32
+  Mean per class: 0.7675544619560242
+  Overall mean: 0.7676
+  Patient_02: shape=(5,), dtype=float32
+  Mean per class: 0.6455603837966919
+  Overall mean: 0.6456
+  Patient_13: shape=(5,), dtype=float32
+  Mean per class: 0.7352811098098755
+  Overall mean: 0.7353
+  Patient_16: shape=(5,), dtype=float32
+  Mean per class: 0.6878875494003296
+  Overall mean: 0.6879
+  Patient_21: shape=(5,), dtype=float32
+  Mean per class: 0.6392896771430969
+  Overall mean: 0.6393
+  Patient_22: shape=(5,), dtype=float32
+  Mean per class: 0.6514490842819214
+  Overall mean: 0.6514
+  Patient_28: shape=(5,), dtype=float32
+  Mean per class: 0.5388602018356323
+  Overall mean: 0.5389
+  Patient_30: shape=(5,), dtype=float32
+  Mean per class: 0.5907236933708191
+  Overall mean: 0.5907
+  Patient_35: shape=(5,), dtype=float32
+  Mean per class: 0.3975793123245239
+  Overall mean: 0.3976
+  Patient_39: shape=(5,), dtype=float32
+  Mean per class: 0.747412919998169
+  Overall mean: 0.7474
+
+JOB STATISTICS
+==============
+Job ID: 15106282
+Cluster: snellius
+User/Group: scur1051/scur1051
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:02:24 core-walltime
+Job Wall-clock time: 00:00:08
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.

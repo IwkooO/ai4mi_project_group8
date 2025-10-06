@@ -18,6 +18,8 @@ cd ~/ai4mi_project_group8
 
 source activate ai4mi
 
+pip install wandb
+
 python -O main.py --dataset $DATA_NAME --mode full --epochs 25 --dest results/$MODEL_NAME --gpu
 
 echo "Training complete for $MODEL_NAME on dataset $DATA_NAME"

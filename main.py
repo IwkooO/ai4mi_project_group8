@@ -37,6 +37,8 @@ from torch import nn, Tensor
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
+import wandb
+
 from functools import partial 
 
 from dataset import SliceDataset
@@ -58,6 +60,7 @@ datasets_params: dict[str, dict[str, Any]] = {}
 datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2, 'kernels': 8, 'factor': 2}
 datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8, 'kernels': 8, 'factor': 2}
 datasets_params["SEGTHOR_CLEAN"] = {'K': 5, 'net': ENet, 'B': 8, 'kernels': 8, 'factor': 2}
+datasets_params["SEGTHOR_CLEAN_AUG"] = {'K': 5, 'net': ENet, 'B': 8, 'kernels': 8, 'factor': 2}
 
 def img_transform(img):
         img = img.convert('L')
@@ -126,6 +129,15 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
 
 def runTraining(args):
     print(f">>> Setting up to train on {args.dataset} with {args.mode}")
+
+    wandb.init(project="segthor-project", config={
+        "epochs": args.epochs,
+        "dataset": args.dataset,
+        "mode": args.mode,
+        "batch_size": datasets_params[args.dataset]['B'],
+        "learning_rate": 0.0005,
+    })
+
     net, optimizer, device, train_loader, val_loader, K = setup(args)
 
     if args.mode == "full":
@@ -191,6 +203,9 @@ def runTraining(args):
                         loss.backward()
                         opt.step()
 
+                    if m == 'train':
+                        wandb.log({"train/loss": loss.item()})
+
                     if m == 'val':
                         with warnings.catch_warnings():
                             warnings.filterwarnings('ignore', category=UserWarning)
@@ -215,6 +230,21 @@ def runTraining(args):
         np.save(args.dest / "loss_val.npy", log_loss_val)
         np.save(args.dest / "dice_val.npy", log_dice_val)
 
+        wandb.log({
+            "epoch": e,
+            "train/dice": log_dice_tra[e, :, 1:].mean().item(),  # mean train dice (skip background)
+            "val/loss": log_loss_val[e].mean().item(),
+            "val/dice": log_dice_val[e, :, 1:].mean().item()
+        })
+
+        # Per-class validation dice (skip class 0 = background)
+        for k in range(1, K):
+            wandb.log({f"val/dice_class_{k}": log_dice_val[e, :, k].mean().item()})
+
+        # Per-class training dice
+        for k in range(1, K):
+            wandb.log({f"train/dice_class_{k}": log_dice_tra[e, :, k].mean().item()})
+
         current_dice: float = log_dice_val[e, :, 1:].mean().item()
         if current_dice > best_dice:
             message = f">>> Improved dice at epoch {e}: {best_dice:05.3f}->{current_dice:05.3f} DSC"
@@ -230,6 +260,8 @@ def runTraining(args):
 
             torch.save(net, args.dest / "bestmodel.pkl")
             torch.save(net.state_dict(), args.dest / "bestweights.pt")
+
+    wandb.finish()
 
 
 def main():
