@@ -31,6 +31,7 @@ from operator import itemgetter
 from shutil import copytree, rmtree
 
 import torch
+from torch_optimizer import Ranger
 import numpy as np
 import torch.nn.functional as F
 from torch import nn, Tensor
@@ -39,6 +40,7 @@ from torch.utils.data import DataLoader
 import wandb
 import os
 from dotenv import load_dotenv
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -109,8 +111,14 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     net.to(device)
 
     lr = 0.0005
-    optimizer = torch.optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999))
-
+    #optimizer = torch.optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999))
+    #optimizer = torch.optim.AdamW(net.parameters(), lr=lr, betas=(0.9, 0.999), weight_decay=0.01)
+    optimizer = Ranger(
+        net.parameters(),
+        lr=lr,
+        weight_decay=0.01,   # tune 0.0–0.01
+    )
+    
     # Dataset part
     B: int = datasets_params[args.dataset]['B']
     root_dir = Path("data") / args.dataset
@@ -142,9 +150,10 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     args.dest.mkdir(parents=True, exist_ok=True)
 
     # Initialize wandb
+    run_name = args.run_name if args.run_name is not None else f"{args.dataset}_{args.mode}_seed{args.seed}"
     wandb.init(
         project="segthor-segmentation",
-        name=f"{args.dataset}_{args.mode}_seed{args.seed}",
+        name=run_name,
         config={
             "epochs": args.epochs,
             "dataset": args.dataset,
@@ -299,6 +308,8 @@ def main():
     parser.add_argument('--mode', default='full', choices=['partial', 'full'])
     parser.add_argument('--dest', type=Path, required=True,
                         help="Destination directory to save the results (predictions and weights).")
+    parser.add_argument('--run_name', type=str, default=None,
+                        help="Custom wandb run name. If not set, uses default format.")
 
     parser.add_argument('--gpu', action='store_true')
     parser.add_argument('--seed', type=int, default=42, 
