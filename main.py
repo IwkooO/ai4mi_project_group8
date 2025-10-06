@@ -36,7 +36,13 @@ import torch.nn.functional as F
 from torch import nn, Tensor
 from torchvision import transforms
 from torch.utils.data import DataLoader
+import wandb
+import os
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
+wandb.login(key=os.getenv("WANDB_API_KEY"))
 from functools import partial 
 
 from dataset import SliceDataset
@@ -77,11 +83,23 @@ def gt_transform(K, img):
         img = class2one_hot(img, K=K)
         return img[0]
 
+def worker_init_fn(worker_id):
+    """Initialize worker with deterministic seed for reproducibility"""
+    np.random.seed(torch.initial_seed() % 2**32)
+
 def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
+    # Set random seeds for reproducibility
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(args.seed)
+        torch.cuda.manual_seed_all(args.seed)
+
     # Networks and scheduler
     gpu: bool = args.gpu and torch.cuda.is_available()
     device = torch.device("cuda") if gpu else torch.device("cpu")
     print(f">> Picked {device} to run experiments")
+    print(f">> Using random seed: {args.seed}")
 
     K: int = datasets_params[args.dataset]['K']
     kernels: int = datasets_params[args.dataset]['kernels'] if 'kernels' in datasets_params[args.dataset] else 8
@@ -97,8 +115,6 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     B: int = datasets_params[args.dataset]['B']
     root_dir = Path("data") / args.dataset
 
-
-
     train_set = SliceDataset('train',
                              root_dir,
                              img_transform=img_transform,
@@ -107,7 +123,9 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     train_loader = DataLoader(train_set,
                               batch_size=B,
                               num_workers=5,
-                              shuffle=True)
+                              shuffle=True,
+                              worker_init_fn=worker_init_fn,
+                              generator=torch.Generator().manual_seed(args.seed))
 
     val_set = SliceDataset('val',
                            root_dir,
@@ -117,9 +135,31 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     val_loader = DataLoader(val_set,
                             batch_size=B,
                             num_workers=5,
-                            shuffle=False)
+                            shuffle=False,
+                            worker_init_fn=worker_init_fn,
+                            generator=torch.Generator().manual_seed(args.seed))
 
     args.dest.mkdir(parents=True, exist_ok=True)
+
+    # Initialize wandb
+    wandb.init(
+        project="segthor-segmentation",
+        name=f"{args.dataset}_{args.mode}_seed{args.seed}",
+        config={
+            "epochs": args.epochs,
+            "dataset": args.dataset,
+            "mode": args.mode,
+            "seed": args.seed,
+            "gpu": args.gpu,
+            "debug": args.debug,
+            "learning_rate": lr,
+            "batch_size": B,
+            "num_classes": K,
+            "architecture": datasets_params[args.dataset]['net'].__name__,
+            "kernels": kernels,
+            "factor": factor
+        }
+    )
 
     return (net, optimizer, device, train_loader, val_loader, K)
 
@@ -219,6 +259,23 @@ def runTraining(args):
         if current_dice > best_dice:
             message = f">>> Improved dice at epoch {e}: {best_dice:05.3f}->{current_dice:05.3f} DSC"
             print(message)
+            # wandb logging
+            epoch_train_loss = log_loss_tra[e].mean().item()
+            epoch_val_loss = log_loss_val[e].mean().item()
+            epoch_train_dice = log_dice_tra[e, :, 1:].mean().item()
+            epoch_val_dice = log_dice_val[e, :, 1:].mean().item()
+            wandb_log = {
+                "epoch": e,
+                "train/loss": epoch_train_loss,
+                "val/loss": epoch_val_loss,
+                "train/dice": epoch_train_dice,
+                "val/dice": epoch_val_dice,
+            }
+            if K > 2:
+                for k in range(1, K):
+                    wandb_log[f"train/dice_class_{k}"] = log_dice_tra[e, :, k].mean().item()
+                    wandb_log[f"val/dice_class_{k}"] = log_dice_val[e, :, k].mean().item()
+            wandb.log(wandb_log)
             best_dice = current_dice
             with open(args.dest / "best_epoch.txt", 'w') as f:
                 f.write(message)
@@ -230,6 +287,8 @@ def runTraining(args):
 
             torch.save(net, args.dest / "bestmodel.pkl")
             torch.save(net.state_dict(), args.dest / "bestweights.pt")
+            # Save model checkpoint to wandb
+            wandb.save(str(args.dest / "bestweights.pt"))
 
 
 def main():
@@ -242,6 +301,8 @@ def main():
                         help="Destination directory to save the results (predictions and weights).")
 
     parser.add_argument('--gpu', action='store_true')
+    parser.add_argument('--seed', type=int, default=42, 
+                        help="Random seed for reproducibility")
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logics around epochs and logging easily.")
