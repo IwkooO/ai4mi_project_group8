@@ -15,84 +15,17 @@ cd $HOME/ai4mi_project_group8/
 source $(conda info --base)/etc/profile.d/conda.sh
 source activate ai4mi_env
 
-pip install wandb python-dotenv
-
 export OMP_NUM_THREADS=2
 export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
-BASE_EXPERIMENT_NAME="experiment_aug_alb_$(date +%Y%m%d_%H%M%S)"
+BASE_EXPERIMENT_NAME=ViT_and_AUG_biggerLR_longer"$(date +%Y%m%d_%H%M%S)"
 SEEDS=(1 2 3)
 
+echo "Submitting separate sbatch jobs for seeds: ${SEEDS[*]}"
 for SEED in "${SEEDS[@]}"; do
-    (
-        EXPERIMENT_NAME="${BASE_EXPERIMENT_NAME}_seed${SEED}"
-        RESULTS_DIR="$HOME/ai4mi_project_group8/results/${EXPERIMENT_NAME}"
-        PRED_DIR="$HOME/ai4mi_project_group8/data/pred_${EXPERIMENT_NAME}"
-        GT_DIR="${PRED_DIR}/gt"
-        PRED_FOLDER="${PRED_DIR}/pred"
-
-        echo "=== Processing Seed: ${SEED} ==="
-        echo "Results directory: ${RESULTS_DIR}"
-        echo "Predictions directory: ${PRED_DIR}"
-
-        python -O main.py \
-            --dataset SEGTHOR_CLEAN_AUG_ALB \
-            --mode full \
-            --epochs 25 \
-            --dest "${RESULTS_DIR}" \
-            --gpu \
-            --seed ${SEED}
-        if [ $? -ne 0 ]; then
-            echo "ERROR: Training failed for seed ${SEED}!"
-            exit 1
-        fi
-        python -c "import torch; torch.cuda.empty_cache(); torch.cuda.synchronize(); print('GPU memory cleared')" 2>/dev/null || echo "GPU cleanup completed"
-
-        python stich.py \
-          --data_folder "${RESULTS_DIR}/best_epoch/val" \
-          --dest_folder "${PRED_FOLDER}" \
-          --num_classes 255 \
-          --grp_regex "(Patient_\\d\\d)_\\d\\d\\d\\d" \
-          --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
-        if [ $? -ne 0 ]; then
-            echo "ERROR: Stitching failed for seed ${SEED}!"
-            exit 1
-        fi
-        python -c "import torch; torch.cuda.empty_cache(); torch.cuda.synchronize(); print('GPU memory cleared')" 2>/dev/null || echo "GPU cleanup completed"
-
-        GT_SOURCE_DIR="$HOME/ai4mi_project_group8/data/segthor_fixed/train"
-        mkdir -p "${GT_DIR}"
-        pred_count=0
-        for pred_file in "${PRED_FOLDER}"/*.nii.gz; do
-            if [ -f "$pred_file" ]; then
-                patient_name=$(basename "$pred_file" .nii.gz)
-                gt_file="${GT_SOURCE_DIR}/${patient_name}/GT.nii.gz"
-                if [ -f "$gt_file" ]; then
-                    cp "$gt_file" "${GT_DIR}/${patient_name}.nii.gz"
-                    pred_count=$((pred_count + 1))
-                fi
-            fi
-        done
-        echo "Total ground truths copied: ${pred_count}"
-
-        python compute_metrics.py \
-          --ref_folder "${GT_DIR}" \
-          --pred_folder "${PRED_FOLDER}" \
-          --ref_extension .nii.gz \
-          --pred_extension .nii.gz \
-          --num_classes 5 \
-          --metrics 3d_dice 3d_hd95 3d_hd 3d_assd 3d_nsd 3d_jaccard \
-          --save_folder "${RESULTS_DIR}/metrics" \
-          --seed ${SEED} \
-          --overwrite 
-        if [ $? -ne 0 ]; then
-            echo "ERROR: Metrics computation failed for seed ${SEED}!"
-            exit 1
-        fi
-        echo "=== Seed ${SEED} Pipeline Completed Successfully! ==="
-    ) &
+  echo "Submitting seed ${SEED}"
+  sbatch jobs/run_seed_pipeline_aug_alb.sh "$SEED" "$BASE_EXPERIMENT_NAME"
 done
 
-wait
-echo "=== All Seeds Pipeline Completed! ==="
+echo "All seed jobs submitted. Monitor with: squeue -u $USER"

@@ -68,7 +68,7 @@ for SEED in "${SEEDS[@]}"; do
 
     # Step 2: Stitch predictions
     echo "=== Step 2: Stitching Predictions (Seed ${SEED}) ==="
-    python stich.py \
+    python stitch.py \
       --data_folder "${RESULTS_DIR}/best_epoch/val" \
       --dest_folder "${PRED_FOLDER}" \
       --num_classes 255 \
