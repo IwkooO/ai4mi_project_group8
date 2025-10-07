@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64GB
 #SBATCH --time=03:00:00
-#SBATCH --output=out/full_pipeline_attention_droppath_progressive_and_hyperparams_3.log
+#SBATCH --output=out/full_pipeline_ViTDP_40epochs_3.log
 
 module load 2023
 module load Anaconda3/2023.07-2
@@ -25,7 +25,7 @@ export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
 # Set experiment name and seeds for reproducibility
-BASE_EXPERIMENT_NAME="experiment_attention_droppath_progressive_and_hyperparams$(date +%Y%m%d_%H%M)"
+BASE_EXPERIMENT_NAME="Vit_40$(date +%Y%m%d_%H%M)"
 SEEDS=(3)  # Use seeds that are less likely to cause CUDA issues
 
 echo "=== Starting Full Pipeline ==="
@@ -52,7 +52,7 @@ for SEED in "${SEEDS[@]}"; do
         --dataset SEGTHOR_CLEAN \
         --run_name "${EXPERIMENT_NAME}" \
         --mode full \
-        --epochs 25 \
+        --epochs 40 \
         --dest "${RESULTS_DIR}" \
         --gpu \
         --seed ${SEED}

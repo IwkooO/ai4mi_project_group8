@@ -354,7 +354,17 @@ class ENet(nn.Module):
                 # Adding transformer block also before compression to gather global cues
                 # This is more lightweight than after compression version
                 # self.trans_enc2 = TransformerBottleneck(
-                #         c_in=K*4, embed_dim=128, depth=1, heads=2, sr_ratio=4, patch=4)
+                #         c_in=K*4, embed_dim=128, depth=1, heads=2, sr_ratio=2, patch=2)
+                # Make more aggressive
+                self.trans_enc2 = TransformerBottleneck(
+                        c_in=K*4,
+                        embed_dim=192,    # was 128
+                        depth=2,          # was 1
+                        heads=4,          # was 2
+                        sr_ratio=1,       # was 2 (finer attention, more tokens)
+                        patch=2,
+                        drop_path_max=0.1 # add progressive DropPath for regularization
+                        )
 
                 # Main ViT block in the bottleneck
                 #self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4)
@@ -395,7 +405,7 @@ class ENet(nn.Module):
                 bn1_0, indices_1 = self.bottleneck1_0(outputInitial)
                 bn1_out = self.bottleneck1_1(bn1_0)
                 ### EXTENSION 
-                #bn1_out = self.trans_enc2(bn1_out)
+                bn1_out = self.trans_enc2(bn1_out)
                 ### END EXTENSION
                 bn2_0, indices_2 = self.bottleneck2_0(bn1_out)
                 bn2_out = self.bottleneck2_1(bn2_0)
