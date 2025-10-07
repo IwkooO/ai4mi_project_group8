@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --partition=gpu_a100
 #SBATCH --gpus=1
-#SBATCH --job-name=full_pipeline_parallel
+#SBATCH --job-name=full_pipeline_parallel_aug
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64GB
 #SBATCH --time=24:00:00
-#SBATCH --output=out/full_pipeline_parallel.log
+#SBATCH --output=out/full_pipeline_parallel_aug.log
 
 module load 2023
 module load Anaconda3/2023.07-2
@@ -21,7 +21,7 @@ export OMP_NUM_THREADS=2
 export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
-BASE_EXPERIMENT_NAME="experiment_$(date +%Y%m%d_%H%M%S)"
+BASE_EXPERIMENT_NAME="experiment_aug_$(date +%Y%m%d_%H%M%S)"
 SEEDS=(1 2 3)
 
 for SEED in "${SEEDS[@]}"; do
@@ -37,7 +37,7 @@ for SEED in "${SEEDS[@]}"; do
         echo "Predictions directory: ${PRED_DIR}"
 
         python -O main.py \
-            --dataset SEGTHOR_CLEAN \
+            --dataset SEGTHOR_CLEAN_AUG \
             --mode full \
             --epochs 25 \
             --dest "${RESULTS_DIR}" \

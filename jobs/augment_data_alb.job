@@ -2,12 +2,12 @@
 
 #SBATCH --partition=gpu_a100
 #SBATCH --gpus=1
-#SBATCH --job-name=augment_data
+#SBATCH --job-name=augment_data_alb
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=8GB
 #SBATCH --time=02:00:00
-#SBATCH --output=out/augment_data.log
+#SBATCH --output=out/augment_data_alb.log
 
 #exit if an error occurs
 set -e
@@ -24,12 +24,13 @@ cd $HOME/ai4mi_project_group8/
 source activate ai4mi_env
 
 pip install opencv-python
+pip install albumentations[imgaug] albumentations[opencv] 
 
-python data_augmentation.py \
-  --augmentations hflip,rotate,scale,crop,elastic,intensity,blur \
+python data_augmentation_alb.py \
   --input_dir data/SEGTHOR_CLEAN \
-  --output_dir data/SEGTHOR_CLEAN_AUG
+  --output_dir data/SEGTHOR_CLEAN_AUG_ALB \
+  --augmentations hflip,rotate,elastic,brightness_contrast,gauss_noise,blur
 
-cp data/SEGTHOR_CLEAN/spacing.pkl data/SEGTHOR_CLEAN_AUG/spacing.pkl
+cp data/SEGTHOR_CLEAN/spacing.pkl data/SEGTHOR_CLEAN_AUG_ALB/spacing.pkl
 
-echo "Data augmentation complete for dataset SEGTHOR_CLEAN_AUG"
+echo "Data augmentation complete for dataset SEGTHOR_CLEAN_AUG_ALB"

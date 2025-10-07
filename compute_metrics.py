@@ -283,6 +283,7 @@ def get_args() -> argparse.Namespace:
                         help="Crop the scans around the objects, discarding parts that contain only"
                              " the background class.")
     parser.add_argument('--background_class', type=int, default=0)
+    parser.add_argument('--seed', type=int, default=0)
 
     parser.add_argument('--chill', action='store_true',
                         help="Does not enforce that both folders have exactly the same scans inside,"
@@ -302,6 +303,7 @@ def get_args() -> argparse.Namespace:
 
 def main() -> None:
     args = get_args()
+    print(f"Computing metrics for seed {args.seed}")
 
     device = torch.device('cuda') if torch.cuda.is_available() and not args.cpu else torch.device('cpu')
     K: int = args.num_classes
