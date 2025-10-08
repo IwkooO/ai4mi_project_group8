@@ -19,7 +19,7 @@ export OMP_NUM_THREADS=2
 export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
-BASE_EXPERIMENT_NAME="TransUNet-AGG$(date +%Y%m%d_%H%M%S)"
+BASE_EXPERIMENT_NAME="TransUNet-Mid-75$(date +%Y%m%d_%H%M%S)"
 SEEDS=(1 2 3)
 
 echo "Submitting separate sbatch jobs for seeds: ${SEEDS[*]}"

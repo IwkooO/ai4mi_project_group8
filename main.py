@@ -50,7 +50,7 @@ from functools import partial
 from dataset import SliceDataset
 from ShallowNet import shallowCNN
 from ENet import ENet
-from TransUNet2D import TransUNet2D2D
+from TransUNet import TransUNet2D
 from utils import (Dcm,
                    class2one_hot,
                    probs2one_hot,
@@ -109,7 +109,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     factor = None
     # Only pass supported arguments to the network constructor
     if datasets_params[args.dataset]['net'] is TransUNet2D:
-        # net = TransUNet2D2D(
+        # net = TransUNet2D(
         #     in_ch=1,
         #     num_classes=5,
         #     base_ch=32,
@@ -119,16 +119,16 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
         #     vit_mlp_ratio=2.0,
         #     vit_dropout=0.1
         # )
-        # net = TransUNet2D2D(
-        #     in_ch=1,
-        #     num_classes=5,
-        #     base_ch=16,
-        #     vit_embed_dim=128,
-        #     vit_depth=2,
-        #     vit_heads=2,
-        #     vit_mlp_ratio=2.0,
-        #     vit_dropout=0.1
-        # )
+        net = TransUNet2D(
+            in_ch=1,
+            num_classes=5,
+            base_ch=16,
+            vit_embed_dim=128,
+            vit_depth=2,
+            vit_heads=2,
+            vit_mlp_ratio=2.0,
+            vit_dropout=0.1
+        )
     else:
         kernels = datasets_params[args.dataset]['kernels'] if 'kernels' in datasets_params[args.dataset] else 8
         factor = datasets_params[args.dataset]['factor'] if 'factor' in datasets_params[args.dataset] else 2

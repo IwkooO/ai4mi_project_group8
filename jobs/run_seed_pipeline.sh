@@ -55,7 +55,7 @@ python -O main.py \
   --dataset SEGTHOR_CLEAN \
   --run_name "${EXPERIMENT_NAME}" \
   --mode full \
-  --epochs 25 \
+  --epochs 75 \
   --dest "${RESULTS_DIR}" \
   --gpu \
   --seed ${SEED}
