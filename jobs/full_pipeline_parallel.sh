@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --partition=gpu_a100
+#SBATCH --partition=gpu_h100
 #SBATCH --gpus=1
 #SBATCH --job-name=full_pipeline_parallel
 #SBATCH --ntasks=1
@@ -15,13 +15,11 @@ cd $HOME/ai4mi_project_group8/
 source $(conda info --base)/etc/profile.d/conda.sh
 source activate ai4mi_env
 
-pip install wandb python-dotenv
-
 export OMP_NUM_THREADS=2
 export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
-BASE_EXPERIMENT_NAME="experiment_$(date +%Y%m%d_%H%M%S)"
+BASE_EXPERIMENT_NAME="TransUNet-AGG$(date +%Y%m%d_%H%M%S)"
 SEEDS=(1 2 3)
 
 echo "Submitting separate sbatch jobs for seeds: ${SEEDS[*]}"

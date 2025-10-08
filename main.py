@@ -50,6 +50,7 @@ from functools import partial
 from dataset import SliceDataset
 from ShallowNet import shallowCNN
 from ENet import ENet
+from TransUNet2D import TransUNet2D2D
 from utils import (Dcm,
                    class2one_hot,
                    probs2one_hot,
@@ -64,8 +65,8 @@ datasets_params: dict[str, dict[str, Any]] = {}
 # K for the number of classes
 # Avoids the classes with C (often used for the number of Channel)
 datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2, 'kernels': 8, 'factor': 2}
-datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8, 'kernels': 8, 'factor': 2}
-datasets_params["SEGTHOR_CLEAN"] = {'K': 5, 'net': ENet, 'B': 8, 'kernels': 8, 'factor': 2}
+datasets_params["SEGTHOR"] = {'K': 5, 'net': TransUNet2D, 'B': 128, 'kernels': 8, 'factor': 2}
+datasets_params["SEGTHOR_CLEAN"] = {'K': 5, 'net': TransUNet2D, 'B': 128, 'kernels': 8, 'factor': 2}
 
 def img_transform(img):
         img = img.convert('L')
@@ -104,13 +105,39 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     print(f">> Using random seed: {args.seed}")
 
     K: int = datasets_params[args.dataset]['K']
-    kernels: int = datasets_params[args.dataset]['kernels'] if 'kernels' in datasets_params[args.dataset] else 8
-    factor: int = datasets_params[args.dataset]['factor'] if 'factor' in datasets_params[args.dataset] else 2
-    net = datasets_params[args.dataset]['net'](1, K, kernels=kernels, factor=factor)
-    net.init_weights()
+    kernels = None
+    factor = None
+    # Only pass supported arguments to the network constructor
+    if datasets_params[args.dataset]['net'] is TransUNet2D:
+        # net = TransUNet2D2D(
+        #     in_ch=1,
+        #     num_classes=5,
+        #     base_ch=32,
+        #     vit_embed_dim=128,
+        #     vit_depth=4,
+        #     vit_heads=8,
+        #     vit_mlp_ratio=2.0,
+        #     vit_dropout=0.1
+        # )
+        # net = TransUNet2D2D(
+        #     in_ch=1,
+        #     num_classes=5,
+        #     base_ch=16,
+        #     vit_embed_dim=128,
+        #     vit_depth=2,
+        #     vit_heads=2,
+        #     vit_mlp_ratio=2.0,
+        #     vit_dropout=0.1
+        # )
+    else:
+        kernels = datasets_params[args.dataset]['kernels'] if 'kernels' in datasets_params[args.dataset] else 8
+        factor = datasets_params[args.dataset]['factor'] if 'factor' in datasets_params[args.dataset] else 2
+        net = datasets_params[args.dataset]['net'](1, K, kernels=kernels, factor=factor)
+    if hasattr(net, 'init_weights'):
+        net.init_weights()
     net.to(device)
 
-    lr = 0.0005
+    lr = 0.005
     optimizer = torch.optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999))
     #optimizer = torch.optim.AdamW(net.parameters(), lr=lr, betas=(0.9, 0.999), weight_decay=0.01)
     # optimizer = Ranger(
