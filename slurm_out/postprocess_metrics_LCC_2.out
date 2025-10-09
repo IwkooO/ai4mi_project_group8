@@ -1,0 +1,45 @@
+PROJECT      : /home/scur1628/ai4mi_project_group8
+RESULTS_DIR  : /home/scur1628/ai4mi_project_group8/results/experiment_seed2
+PRED_IN      : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred
+PRED_POST    : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred_post
+GT_DIR       : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/gt
+GT_SOURCE    : /home/scur1628/ai4mi_project_group8/data/segthor_fixed/train
+METRICS_OUT  : /home/scur1628/ai4mi_project_group8/results/experiment_seed2/metrics_post
+==> Post-processing prediction (LCC per class)
+[INFO] Processing Patient_01.nii.gz
+[INFO] Processing Patient_02.nii.gz
+[INFO] Processing Patient_13.nii.gz
+[INFO] Processing Patient_16.nii.gz
+[INFO] Processing Patient_21.nii.gz
+[INFO] Processing Patient_22.nii.gz
+[INFO] Processing Patient_28.nii.gz
+[INFO] Processing Patient_30.nii.gz
+[INFO] Processing Patient_35.nii.gz
+[INFO] Processing Patient_39.nii.gz
+==> Preparing GT subset for the predicted patients
+Copied 10 GT volumes into /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/gt
+{'background_class': 0,
+ 'chill': False,
+ 'cpu': False,
+ 'crop': False,
+ 'ignored_classes': None,
+ 'metrics': ['3d_dice', '3d_hd95', '3d_hd', '3d_assd', '3d_nsd', '3d_jaccard'],
+ 'num_classes': 5,
+ 'num_workers': 9,
+ 'overwrite': True,
+ 'pred_extension': '.nii.gz',
+ 'pred_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred_post'),
+ 'ref_extension': '.nii.gz',
+ 'ref_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/gt'),
+ 'save_folder': PosixPath('/home/scur1628/ai4mi_project_group8/results/experiment_seed2/metrics_post')}
+[34m>>> Initializing Volume dataset with 10 volumes[39m[49m
+>>  /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/gt, /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred_post
+[32m> All stems found in both folders[39m[49m
+>>> /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred_post
+3d_dice [0.998207   0.42294002 0.8384859  0.78816384 0.7581025 ]
+3d_hd95 [ 2.1746511 37.090202  14.738225  10.088514  19.40221  ]
+3d_hd [33.69107  75.24856  23.903173 27.083166 46.102337]
+3d_assd [ 0.3831567 16.384285   4.9666853  2.7061222  5.080911 ]
+3d_nsd [0.9466008  0.3381074  0.3224193  0.68598336 0.4716921 ]
+3d_jaccard [0.9964243  0.28208366 0.7366692  0.66139555 0.6249227 ]
+==> Done. Metrics saved in: /home/scur1628/ai4mi_project_group8/results/experiment_seed2/metrics_post

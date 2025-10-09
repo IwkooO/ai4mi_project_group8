@@ -6,8 +6,8 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64GB
 #SBATCH --time=03:00:00
-#SBATCH --output=out/full_pipeline_parallel.log
-#SBATCH --error=err/full_pipeline_parallel.err
+#SBATCH --output=out/full_pipeline_parallel_3.log
+#SBATCH --error=err/full_pipeline_parallel_3.err
 
 module load 2023
 module load Anaconda3/2023.07-2
@@ -23,7 +23,7 @@ export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
 BASE_EXPERIMENT_NAME="experiment_$(date +%Y%m%d_%H%M%S)"
-SEEDS=(1)
+SEEDS=(3)
 
 for SEED in "${SEEDS[@]}"; do
     (

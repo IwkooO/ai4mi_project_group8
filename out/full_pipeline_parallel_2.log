@@ -1,0 +1,98 @@
+Requirement already satisfied: wandb in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (0.22.1)
+Requirement already satisfied: python-dotenv in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (1.1.1)
+Requirement already satisfied: click>=8.0.1 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (8.3.0)
+Requirement already satisfied: gitpython!=3.1.29,>=1.0.0 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (3.1.45)
+Requirement already satisfied: packaging in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (25.0)
+Requirement already satisfied: platformdirs in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (4.4.0)
+Requirement already satisfied: protobuf!=4.21.0,!=5.28.0,<7,>=3.19.0 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (6.32.1)
+Requirement already satisfied: pydantic<3 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (2.11.10)
+Requirement already satisfied: pyyaml in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (6.0.3)
+Requirement already satisfied: requests<3,>=2.0.0 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (2.32.5)
+Requirement already satisfied: sentry-sdk>=2.0.0 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (2.40.0)
+Requirement already satisfied: typing-extensions<5,>=4.8 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from wandb) (4.15.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from pydantic<3->wandb) (0.7.0)
+Requirement already satisfied: pydantic-core==2.33.2 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from pydantic<3->wandb) (2.33.2)
+Requirement already satisfied: typing-inspection>=0.4.0 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from pydantic<3->wandb) (0.4.2)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from requests<3,>=2.0.0->wandb) (3.4.3)
+Requirement already satisfied: idna<4,>=2.5 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from requests<3,>=2.0.0->wandb) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from requests<3,>=2.0.0->wandb) (2.5.0)
+Requirement already satisfied: certifi>=2017.4.17 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from requests<3,>=2.0.0->wandb) (2025.10.5)
+Requirement already satisfied: gitdb<5,>=4.0.1 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from gitpython!=3.1.29,>=1.0.0->wandb) (4.0.12)
+Requirement already satisfied: smmap<6,>=3.0.1 in /home/scur1628/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from gitdb<5,>=4.0.1->gitpython!=3.1.29,>=1.0.0->wandb) (5.0.2)
+=== Processing Seed: 2 ===
+Results directory: /home/scur1628/ai4mi_project_group8/results/experiment_20251009_163209_seed2
+Predictions directory: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2
+Namespace(epochs=25, dataset='SEGTHOR_CLEAN', mode='full', dest=PosixPath('/home/scur1628/ai4mi_project_group8/results/experiment_20251009_163209_seed2'), gpu=True, seed=2, debug=False)
+>>> Setting up to train on SEGTHOR_CLEAN with full
+>> Picked cuda to run experiments
+>> Using random seed: 2
+> Initialized ENet (in_dim=1->out_dim=5) with {'kernels': 8, 'factor': 2}
+> root=PosixPath('data/SEGTHOR_CLEAN')
+>> Created train dataset with 5453 images...
+> root=PosixPath('data/SEGTHOR_CLEAN')
+>> Created val dataset with 1967 images...
+Initialized CrossEntropy with {'idk': [0, 1, 2, 3, 4]}
+>>> Improved dice at epoch 0: 0.000->0.605 DSC
+>>> Improved dice at epoch 1: 0.605->0.649 DSC
+>>> Improved dice at epoch 2: 0.649->0.653 DSC
+>>> Improved dice at epoch 3: 0.653->0.671 DSC
+>>> Improved dice at epoch 4: 0.671->0.691 DSC
+>>> Improved dice at epoch 5: 0.691->0.710 DSC
+>>> Improved dice at epoch 6: 0.710->0.755 DSC
+>>> Improved dice at epoch 7: 0.755->0.772 DSC
+>>> Improved dice at epoch 9: 0.772->0.791 DSC
+>>> Improved dice at epoch 11: 0.791->0.793 DSC
+>>> Improved dice at epoch 12: 0.793->0.814 DSC
+>>> Improved dice at epoch 15: 0.814->0.827 DSC
+>>> Improved dice at epoch 17: 0.827->0.842 DSC
+>>> Improved dice at epoch 23: 0.842->0.849 DSC
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mSEGTHOR_CLEAN_full_seed2[0m at: [34m[0m
+[1;34mwandb[0m: Find logs at: [1;35m../../../gpfs/home2/scur1628/ai4mi_project_group8/wandb/run-20251009_163226-ijgypuat/logs[0m
+GPU memory cleared
+Namespace(data_folder=PosixPath('/home/scur1628/ai4mi_project_group8/results/experiment_20251009_163209_seed2/best_epoch/val'), source_scan_pattern='data/segthor_train/train/{id_}/GT.nii.gz', dest_folder=PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred'), grp_regex='(Patient_\\d\\d)_\\d\\d\\d\\d', num_classes=255)
+['Patient_02', 'Patient_21', 'Patient_35', 'Patient_01', 'Patient_39', 'Patient_13', 'Patient_28', 'Patient_30', 'Patient_22', 'Patient_16']
+Found 10 unique patients out of 1967 images ; regex: (Patient_\d\d)_\d\d\d\d
+GPU memory cleared
+Total ground truths copied: 10
+{'background_class': 0,
+ 'chill': False,
+ 'cpu': False,
+ 'crop': False,
+ 'ignored_classes': None,
+ 'metrics': ['3d_dice', '3d_hd95', '3d_hd', '3d_assd', '3d_nsd', '3d_jaccard'],
+ 'num_classes': 5,
+ 'num_workers': 9,
+ 'overwrite': True,
+ 'pred_extension': '.nii.gz',
+ 'pred_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred'),
+ 'ref_extension': '.nii.gz',
+ 'ref_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/gt'),
+ 'save_folder': PosixPath('/home/scur1628/ai4mi_project_group8/results/experiment_20251009_163209_seed2/metrics')}
+[34m>>> Initializing Volume dataset with 10 volumes[39m[49m
+>>  /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/gt, /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred
+[32m> All stems found in both folders[39m[49m
+>>> /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_2/pred
+3d_dice [0.99821484 0.48492926 0.83809507 0.79675555 0.7733541 ]
+3d_hd95 [ 2.0635743 12.636507  14.813159  10.09896   15.73848  ]
+3d_hd [48.541317 27.672283 25.182201 90.914635 64.81028 ]
+3d_assd [0.36962172 3.8588703  5.030806   2.3897066  3.6718452 ]
+3d_nsd [0.9453143  0.38610777 0.32112938 0.684126   0.46687165]
+3d_jaccard [0.99643975 0.33243734 0.73609716 0.6685321  0.6385243 ]
+=== Seed 2 Pipeline Completed Successfully! ===
+=== All Seeds Pipeline Completed! ===
+
+JOB STATISTICS
+==============
+Job ID: 15224703
+Cluster: snellius
+User/Group: scur1628/scur1628
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 06:07:48 core-walltime
+Job Wall-clock time: 00:20:26
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 64.00 GB (64.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.

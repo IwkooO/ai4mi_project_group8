@@ -8,21 +8,22 @@
 
 # remove output/error directives from SBATCH
 # we will set them after we define SEED
-# #SBATCH --output=slurm_out/postprocess_metrics_${SEED}.out
-# #SBATCH --error=slurm_out/postprocess_metrics_${SEED}.err
+# #SBATCH --output=slurm_out/postprocess_metrics_LCC_${SEED}.out
+# #SBATCH --error=slurm_out/postprocess_metrics_LCC_${SEED}.err
 
 set -euo pipefail
 
-# choose seed here
-SEED=1
+# choose seed and mode here (LCC, morphology, LCC+morphology)
+SEED=3
+mode=LCC
 
 # create log directory and redirect stdout/stderr
 mkdir -p slurm_out
-exec >"slurm_out/postprocess_metrics_${SEED}.out" 2>"slurm_out/postprocess_metrics_${SEED}.err"
+exec >"slurm_out/postprocess_metrics_${mode}_${SEED}.out" 2>"slurm_out/postprocess_metrics_${mode}_${SEED}.err"
 
 
 PROJECT="$HOME/ai4mi_project_group8"
-RESULTS_DIR="$PROJECT/results/experiment_seed${SEED}"
+RESULTS_DIR="$PROJECT/results/experiment_${mode}_seed${SEED}"
 
 # RESULTS_DIR="$PROJECT/results/experiment_20251007_011801_seed${SEED}"
 # RESULTS_DIR="$PROJECT/results/experiment_20251007_143235_seed${SEED}"

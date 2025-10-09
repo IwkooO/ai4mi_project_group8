@@ -1,13 +1,3 @@
-
-# def keep_largest_component(volume, class_id):
-#     mask = (volume == class_id)
-#     labeled, n = label(mask)
-#     if n == 0:
-#         return mask 
-#     largest = 1 + np.argmax(np.bincount(labeled.ravel())[1:])
-#     cleaned = (labeled == largest)
-#     return cleaned
-
 import argparse
 from pathlib import Path
 import numpy as np

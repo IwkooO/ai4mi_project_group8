@@ -1,0 +1,14 @@
+
+JOB STATISTICS
+==============
+Job ID: 15227447
+Cluster: snellius
+User/Group: scur1628/scur1628
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:01:24
+CPU Efficiency: 5.56% of 00:25:12 core-walltime
+Job Wall-clock time: 00:01:24
+Memory Utilized: 859.87 MB
+Memory Efficiency: 2.62% of 32.00 GB (32.00 GB/node)
