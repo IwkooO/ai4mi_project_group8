@@ -7,6 +7,7 @@
 #SBATCH --mem=64GB
 #SBATCH --time=03:00:00
 #SBATCH --output=out/full_pipeline_parallel.log
+#SBATCH --error=err/full_pipeline_parallel.err
 
 module load 2023
 module load Anaconda3/2023.07-2
@@ -22,13 +23,13 @@ export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
 BASE_EXPERIMENT_NAME="experiment_$(date +%Y%m%d_%H%M%S)"
-SEEDS=(3)
+SEEDS=(1)
 
 for SEED in "${SEEDS[@]}"; do
     (
         EXPERIMENT_NAME="${BASE_EXPERIMENT_NAME}_seed${SEED}"
-        RESULTS_DIR="/home/scur1049/ai4mi_project_group8/results/${EXPERIMENT_NAME}"
-        PRED_DIR="/home/scur1049/ai4mi_project_group8/data/seghtor_predictions_${SEED}"
+        RESULTS_DIR="$HOME/ai4mi_project_group8/results/${EXPERIMENT_NAME}"
+        PRED_DIR="$HOME/ai4mi_project_group8/data/seghtor_predictions_${SEED}"
         GT_DIR="${PRED_DIR}/gt"
         PRED_FOLDER="${PRED_DIR}/pred"
 
@@ -61,7 +62,7 @@ for SEED in "${SEEDS[@]}"; do
         fi
         python -c "import torch; torch.cuda.empty_cache(); torch.cuda.synchronize(); print('GPU memory cleared')" 2>/dev/null || echo "GPU cleanup completed"
 
-        GT_SOURCE_DIR="/home/scur1049/ai4mi_project_group8/data/segthor_fixed/train"
+        GT_SOURCE_DIR="$HOME/ai4mi_project_group8/data/segthor_fixed/train"
         mkdir -p "${GT_DIR}"
         pred_count=0
         for pred_file in "${PRED_FOLDER}"/*.nii.gz; do

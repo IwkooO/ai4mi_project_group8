@@ -1,0 +1,32 @@
+#!/bin/bash
+#SBATCH --partition=gpu_mig
+#SBATCH --gpus=1
+#SBATCH --job-name=setup_env
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=9
+#SBATCH --time=00:30:00
+#SBATCH --output=out/setup_%A.out
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+# Change to your project directory
+cd $HOME/ai4mi_project_group8/
+
+
+# Create a conda environment named "ai4mi_env" with Python 3.11
+conda create -y -n ai4mi_env python=3.11
+
+# Activate the conda environment
+source activate ai4mi_env
+
+# (Optional) Verify that the correct Python is being used
+which python
+python --version
+
+# Install dependencies from requirements.txt
+pip install -r requirements.txt
+
+# Echo a message upon successful completion
+echo "Env created successfully."

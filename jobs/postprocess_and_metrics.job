@@ -1,0 +1,93 @@
+#!/bin/bash
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=01:00:00
+#SBATCH --job-name=postprocess_metrics
+
+# remove output/error directives from SBATCH
+# we will set them after we define SEED
+# #SBATCH --output=slurm_out/postprocess_metrics_${SEED}.out
+# #SBATCH --error=slurm_out/postprocess_metrics_${SEED}.err
+
+set -euo pipefail
+
+# choose seed here
+SEED=1
+
+# create log directory and redirect stdout/stderr
+mkdir -p slurm_out
+exec >"slurm_out/postprocess_metrics_${SEED}.out" 2>"slurm_out/postprocess_metrics_${SEED}.err"
+
+
+PROJECT="$HOME/ai4mi_project_group8"
+RESULTS_DIR="$PROJECT/results/experiment_seed${SEED}"
+
+# RESULTS_DIR="$PROJECT/results/experiment_20251007_011801_seed${SEED}"
+# RESULTS_DIR="$PROJECT/results/experiment_20251007_143235_seed${SEED}"
+# RESULTS_DIR="$PROJECT/results/experiment_20251007_171215_seed${SEED}"
+
+# Inputs & outputs
+PRED_IN="$PROJECT/data/seghtor_predictions_${SEED}/pred"      # stitched predictions (input)
+PRED_POST="$PROJECT/data/seghtor_predictions_${SEED}/pred_post"  # post-processed predictions (output)
+GT_DIR="$PROJECT/data/seghtor_predictions_${SEED}/gt"         # where we copy GTs for these patients
+GT_SOURCE="$PROJECT/data/segthor_fixed/train"                 # original GT source
+METRICS_OUT="${RESULTS_DIR}/metrics_post"                     # where metrics will be written
+
+echo "PROJECT      : ${PROJECT}"
+echo "RESULTS_DIR  : ${RESULTS_DIR}"
+echo "PRED_IN      : ${PRED_IN}"
+echo "PRED_POST    : ${PRED_POST}"
+echo "GT_DIR       : ${GT_DIR}"
+echo "GT_SOURCE    : ${GT_SOURCE}"
+echo "METRICS_OUT  : ${METRICS_OUT}"
+
+
+module load 2023
+module load Anaconda3/2023.07-2
+mkdir -p slurm_out "${METRICS_OUT}" "${PRED_POST}" "${GT_DIR}"
+
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate ai4mi_env
+
+# (optional, keeps kernels well-behaved on shared nodes)
+export OMP_NUM_THREADS=2
+export MKL_NUM_THREADS=2
+export OPENBLAS_NUM_THREADS=2
+
+# post-process predictions
+echo "==> Post-processing prediction (LCC per class)"
+python postprocess.py \
+  --in_folder  "${PRED_IN}" \
+  --out_folder "${PRED_POST}" \
+  --num_classes 5
+
+# prepare the matching GT subset for these predictions
+echo "==> Preparing GT subset for the predicted patients"
+count=0
+for pred_file in "${PRED_POST}"/*.nii.gz; do
+  [ -e "$pred_file" ] || continue
+  patient=$(basename "$pred_file" .nii.gz)
+  src="${GT_SOURCE}/${patient}/GT.nii.gz"
+  if [ -f "$src" ]; then
+    cp -f "$src" "${GT_DIR}/${patient}.nii.gz"
+    count=$((count+1))
+  else
+    echo "[WARN] Missing GT for ${patient} at ${src}"
+  fi
+done
+echo "Copied ${count} GT volumes into ${GT_DIR}"
+
+# Compute metrics on post-processed predictions
+python compute_metrics.py \
+  --ref_folder "${GT_DIR}" \
+  --pred_folder "${PRED_POST}" \
+  --ref_extension .nii.gz \
+  --pred_extension .nii.gz \
+  --num_classes 5 \
+  --metrics 3d_dice 3d_hd95 3d_hd 3d_assd 3d_nsd 3d_jaccard \
+  --save_folder "${METRICS_OUT}" \
+  --overwrite
+
+echo "==> Done. Metrics saved in: ${METRICS_OUT}"

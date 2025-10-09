@@ -1,0 +1,59 @@
+PROJECT      : /home/scur1628/ai4mi_project_group8
+RESULTS_DIR  : /home/scur1628/ai4mi_project_group8/results/experiment_20251007_011801_seed3
+PRED_IN      : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred
+PRED_POST    : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post
+GT_DIR       : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt
+GT_SOURCE    : /home/scur1628/ai4mi_project_group8/data/segthor_fixed/train
+METRICS_OUT  : /home/scur1628/ai4mi_project_group8/results/experiment_20251007_011801_seed3/metrics_post
+==> Post-processing prediction (LCC per class)
+[INFO] Processing Patient_01.nii.gz
+[INFO] Processing Patient_02.nii.gz
+[INFO] Processing Patient_13.nii.gz
+[INFO] Processing Patient_16.nii.gz
+[INFO] Processing Patient_21.nii.gz
+[INFO] Processing Patient_22.nii.gz
+[INFO] Processing Patient_28.nii.gz
+[INFO] Processing Patient_30.nii.gz
+[INFO] Processing Patient_35.nii.gz
+[INFO] Processing Patient_39.nii.gz
+==> Preparing GT subset for the predicted patients
+Copied 10 GT volumes into /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt
+{'background_class': 0,
+ 'chill': False,
+ 'cpu': False,
+ 'crop': False,
+ 'ignored_classes': None,
+ 'metrics': ['3d_dice', '3d_hd95', '3d_hd', '3d_assd', '3d_nsd', '3d_jaccard'],
+ 'num_classes': 5,
+ 'num_workers': 9,
+ 'overwrite': True,
+ 'pred_extension': '.nii.gz',
+ 'pred_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post'),
+ 'ref_extension': '.nii.gz',
+ 'ref_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt'),
+ 'save_folder': PosixPath('/home/scur1628/ai4mi_project_group8/results/experiment_20251007_011801_seed3/metrics_post')}
+[34m>>> Initializing Volume dataset with 10 volumes[39m[49m
+>>  /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt, /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post
+[32m> All stems found in both folders[39m[49m
+>>> /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post
+3d_dice [0.9983758  0.44574276 0.851326   0.74324155 0.78708696]
+3d_hd95 [ 2.111463  28.910742  11.3887615 10.37338   15.201263 ]
+3d_hd [29.253399 57.269005 22.531857 28.194946 36.54987 ]
+3d_assd [0.3335047 9.652535  4.511164  3.2940094 5.3557096]
+3d_nsd [0.94810057 0.369502   0.34141502 0.6054766  0.51216036]
+3d_jaccard [0.9967605  0.301774   0.7594521  0.6073915  0.66524637]
+==> Done. Metrics saved in: /home/scur1628/ai4mi_project_group8/results/experiment_20251007_011801_seed3/metrics_post
+
+JOB STATISTICS
+==============
+Job ID: 15149779
+Cluster: snellius
+User/Group: scur1628/scur1628
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:01:24
+CPU Efficiency: 5.36% of 00:26:06 core-walltime
+Job Wall-clock time: 00:01:27
+Memory Utilized: 1.38 GB
+Memory Efficiency: 4.31% of 32.00 GB (32.00 GB/node)

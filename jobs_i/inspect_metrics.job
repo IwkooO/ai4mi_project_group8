@@ -13,7 +13,7 @@ module load 2024
 module load Miniconda3/24.7.1-0
 module load CUDA/12.6.0
 
-source activate ai4mi311
+source activate ai4mi
 
 cd ~/ai4mi_project_group8
 

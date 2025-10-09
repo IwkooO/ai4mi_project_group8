@@ -13,39 +13,44 @@ the 'module load <package__name>' command. If you are uncertain if a package is
 already available 
 on the system, please use 'module avail' or 'module spider' to search for it.
 ============================================================================================== 
-Requirement already satisfied: torch in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (2.8.0)
-Requirement already satisfied: torchvision in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (0.23.0)
-Requirement already satisfied: torchaudio in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (2.8.0)
-Requirement already satisfied: filelock in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.19.1)
-Requirement already satisfied: typing-extensions>=4.10.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (4.15.0)
-Requirement already satisfied: sympy>=1.13.3 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (1.14.0)
-Requirement already satisfied: networkx in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.5)
-Requirement already satisfied: jinja2 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.1.6)
-Requirement already satisfied: fsspec in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (2025.9.0)
-Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.93)
-Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.90)
-Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.90)
-Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (9.10.2.21)
-Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.4.1)
-Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (11.3.3.83)
-Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (10.3.9.90)
-Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (11.7.3.90)
-Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.5.8.93)
-Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (0.7.1)
-Requirement already satisfied: nvidia-nccl-cu12==2.27.3 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (2.27.3)
-Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.90)
-Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.93)
-Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (1.13.1.3)
-Requirement already satisfied: triton==3.4.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.4.0)
-Requirement already satisfied: setuptools>=40.8.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from triton==3.4.0->torch) (78.1.1)
-Requirement already satisfied: numpy in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torchvision) (2.3.3)
-Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torchvision) (11.3.0)
-Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from sympy>=1.13.3->torch) (1.3.0)
-Requirement already satisfied: MarkupSafe>=2.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from jinja2->torch) (3.0.3)
+Requirement already satisfied: torch in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (2.8.0)
+Requirement already satisfied: torchvision in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (0.23.0)
+Collecting torchaudio
+  Downloading torchaudio-2.8.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (7.2 kB)
+Requirement already satisfied: filelock in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.19.1)
+Requirement already satisfied: typing-extensions>=4.10.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (4.15.0)
+Requirement already satisfied: sympy>=1.13.3 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (1.14.0)
+Requirement already satisfied: networkx in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.5)
+Requirement already satisfied: jinja2 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.1.6)
+Requirement already satisfied: fsspec in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (2025.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.3 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (2.27.3)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (1.13.1.3)
+Requirement already satisfied: triton==3.4.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch) (3.4.0)
+Requirement already satisfied: setuptools>=40.8.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from triton==3.4.0->torch) (78.1.1)
+Requirement already satisfied: numpy in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torchvision) (2.3.3)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torchvision) (11.3.0)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from sympy>=1.13.3->torch) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from jinja2->torch) (3.0.3)
+Downloading torchaudio-2.8.0-cp311-cp311-manylinux_2_28_x86_64.whl (4.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.0/4.0 MB 104.9 MB/s  0:00:00
+Installing collected packages: torchaudio
+Successfully installed torchaudio-2.8.0
 True
 Collecting git+https://github.com/jeromerony/distorch.git
-  Cloning https://github.com/jeromerony/distorch.git to /gpfs/scratch1/nodespecific/gcn35/scur1051.15101787/pip-req-build-54xvttbq
-  Running command git clone --filter=blob:none --quiet https://github.com/jeromerony/distorch.git /gpfs/scratch1/nodespecific/gcn35/scur1051.15101787/pip-req-build-54xvttbq
+  Cloning https://github.com/jeromerony/distorch.git to /gpfs/scratch1/nodespecific/gcn31/scur1628.15102293/pip-req-build-vgfvall6
+  Running command git clone --filter=blob:none --quiet https://github.com/jeromerony/distorch.git /gpfs/scratch1/nodespecific/gcn31/scur1628.15102293/pip-req-build-vgfvall6
   Resolved https://github.com/jeromerony/distorch.git to commit 80f190cb46632b1f05dc1a608f6b368f89dbcea2
   Installing build dependencies: started
   Installing build dependencies: finished with status 'done'
@@ -53,31 +58,31 @@ Collecting git+https://github.com/jeromerony/distorch.git
   Getting requirements to build wheel: finished with status 'done'
   Preparing metadata (pyproject.toml): started
   Preparing metadata (pyproject.toml): finished with status 'done'
-Requirement already satisfied: torch>=2.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from distorch==0.1.2) (2.8.0)
-Requirement already satisfied: filelock in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.19.1)
-Requirement already satisfied: typing-extensions>=4.10.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (4.15.0)
-Requirement already satisfied: sympy>=1.13.3 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (1.14.0)
-Requirement already satisfied: networkx in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.5)
-Requirement already satisfied: jinja2 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.1.6)
-Requirement already satisfied: fsspec in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (2025.9.0)
-Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.93)
-Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
-Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
-Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (9.10.2.21)
-Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.4.1)
-Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (11.3.3.83)
-Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (10.3.9.90)
-Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (11.7.3.90)
-Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.5.8.93)
-Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (0.7.1)
-Requirement already satisfied: nvidia-nccl-cu12==2.27.3 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (2.27.3)
-Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
-Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.93)
-Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (1.13.1.3)
-Requirement already satisfied: triton==3.4.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.4.0)
-Requirement already satisfied: setuptools>=40.8.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from triton==3.4.0->torch>=2.0->distorch==0.1.2) (78.1.1)
-Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from sympy>=1.13.3->torch>=2.0->distorch==0.1.2) (1.3.0)
-Requirement already satisfied: MarkupSafe>=2.0 in /home/scur1051/.conda/envs/ai4mi/lib/python3.11/site-packages (from jinja2->torch>=2.0->distorch==0.1.2) (3.0.3)
+Requirement already satisfied: torch>=2.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from distorch==0.1.2) (2.8.0)
+Requirement already satisfied: filelock in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.19.1)
+Requirement already satisfied: typing-extensions>=4.10.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (4.15.0)
+Requirement already satisfied: sympy>=1.13.3 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (1.14.0)
+Requirement already satisfied: networkx in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.5)
+Requirement already satisfied: jinja2 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.1.6)
+Requirement already satisfied: fsspec in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (2025.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.3 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (2.27.3)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (1.13.1.3)
+Requirement already satisfied: triton==3.4.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from torch>=2.0->distorch==0.1.2) (3.4.0)
+Requirement already satisfied: setuptools>=40.8.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from triton==3.4.0->torch>=2.0->distorch==0.1.2) (78.1.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from sympy>=1.13.3->torch>=2.0->distorch==0.1.2) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/scur1628/.conda/envs/ai4mi/lib/python3.11/site-packages (from jinja2->torch>=2.0->distorch==0.1.2) (3.0.3)
 {'background_class': 0,
  'chill': True,
  'cpu': False,
@@ -88,32 +93,32 @@ Requirement already satisfied: MarkupSafe>=2.0 in /home/scur1051/.conda/envs/ai4
  'num_workers': 9,
  'overwrite': False,
  'pred_extension': '.nii.gz',
- 'pred_folder': PosixPath('/home/scur1051/ai4mi_project_group8/results/segthor_baseline/stitched_pred'),
+ 'pred_folder': PosixPath('/home/scur1628/ai4mi_project_group8/results/segthor_baseline/stitched_pred'),
  'ref_extension': '.nii.gz',
- 'ref_folder': PosixPath('/home/scur1051/ai4mi_project_group8/results/segthor_baseline/gt'),
- 'save_folder': PosixPath('/home/scur1051/ai4mi_project_group8/results/segthor_baseline/metrics')}
+ 'ref_folder': PosixPath('/home/scur1628/ai4mi_project_group8/results/segthor_baseline/gt'),
+ 'save_folder': PosixPath('/home/scur1628/ai4mi_project_group8/results/segthor_baseline/metrics')}
 [34m>>> Initializing Volume dataset with 10 volumes[39m[49m
->>  /home/scur1051/ai4mi_project_group8/results/segthor_baseline/gt, /home/scur1051/ai4mi_project_group8/results/segthor_baseline/stitched_pred
+>>  /home/scur1628/ai4mi_project_group8/results/segthor_baseline/gt, /home/scur1628/ai4mi_project_group8/results/segthor_baseline/stitched_pred
 [32m> All stems found in both folders[39m[49m
->> Computing:   0%|          | 0/10 [?it/s]>> Computing:   0%|          | 0/10 [?it/s, batch_shape=[1, 512, 512, 229], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  10%|█         | 1/10 [ 3.03s/it, batch_shape=[1, 512, 512, 229], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  10%|█         | 1/10 [ 3.03s/it, batch_shape=[1, 512, 512, 246], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  20%|██        | 2/10 [ 1.41s/it, batch_shape=[1, 512, 512, 246], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  20%|██        | 2/10 [ 1.41s/it, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  30%|███       | 3/10 [ 1.08it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  30%|███       | 3/10 [ 1.08it/s, batch_shape=[1, 512, 512, 166], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  40%|████      | 4/10 [ 1.50it/s, batch_shape=[1, 512, 512, 166], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  40%|████      | 4/10 [ 1.50it/s, batch_shape=[1, 512, 512, 158], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  50%|█████     | 5/10 [ 1.94it/s, batch_shape=[1, 512, 512, 158], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  50%|█████     | 5/10 [ 1.94it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  60%|██████    | 6/10 [ 2.40it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  60%|██████    | 6/10 [ 2.40it/s, batch_shape=[1, 512, 512, 179], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  70%|███████   | 7/10 [ 2.51it/s, batch_shape=[1, 512, 512, 179], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  70%|███████   | 7/10 [ 2.51it/s, batch_shape=[1, 512, 512, 171], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  80%|████████  | 8/10 [ 2.78it/s, batch_shape=[1, 512, 512, 171], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  80%|████████  | 8/10 [ 2.78it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['1.367', '1.367', '2.000']]>> Computing:  90%|█████████ | 9/10 [ 3.15it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['1.367', '1.367', '2.000']]>> Computing:  90%|█████████ | 9/10 [ 3.15it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing: 100%|██████████| 10/10 [ 3.20it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]                                                                                                                          >>> /home/scur1051/ai4mi_project_group8/results/segthor_baseline/stitched_pred
-3d_dice [0.9983746  0.40501395 0.848501   0.7248096  0.7572083 ]
-3d_hd95 [ 2.0274634 40.096123  12.345901  11.242174  24.710524 ]
-3d_hd [ 46.73159  103.296555  32.43105   30.270899  67.21532 ]
-3d_assd [ 0.33584306 12.917475    4.8221107   2.742755    4.1996994 ]
-3d_nsd [0.94686615 0.29112023 0.3401733  0.58986247 0.46805555]
-3d_jaccard [0.99675816 0.26492217 0.7547658  0.57878166 0.61748916]
+>> Computing:   0%|          | 0/10 [?it/s]>> Computing:   0%|          | 0/10 [?it/s, batch_shape=[1, 512, 512, 229], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  10%|█         | 1/10 [ 3.16s/it, batch_shape=[1, 512, 512, 229], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  10%|█         | 1/10 [ 3.16s/it, batch_shape=[1, 512, 512, 246], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  20%|██        | 2/10 [ 1.47s/it, batch_shape=[1, 512, 512, 246], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  20%|██        | 2/10 [ 1.47s/it, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  30%|███       | 3/10 [ 1.05it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing:  30%|███       | 3/10 [ 1.05it/s, batch_shape=[1, 512, 512, 166], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  40%|████      | 4/10 [ 1.47it/s, batch_shape=[1, 512, 512, 166], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  40%|████      | 4/10 [ 1.47it/s, batch_shape=[1, 512, 512, 158], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  50%|█████     | 5/10 [ 1.92it/s, batch_shape=[1, 512, 512, 158], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  50%|█████     | 5/10 [ 1.92it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  60%|██████    | 6/10 [ 2.39it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  60%|██████    | 6/10 [ 2.39it/s, batch_shape=[1, 512, 512, 179], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  70%|███████   | 7/10 [ 2.43it/s, batch_shape=[1, 512, 512, 179], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  70%|███████   | 7/10 [ 2.43it/s, batch_shape=[1, 512, 512, 171], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  80%|████████  | 8/10 [ 2.73it/s, batch_shape=[1, 512, 512, 171], voxelspacing=['0.977', '0.977', '2.500']]>> Computing:  80%|████████  | 8/10 [ 2.73it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['1.367', '1.367', '2.000']]>> Computing:  90%|█████████ | 9/10 [ 3.03it/s, batch_shape=[1, 512, 512, 181], voxelspacing=['1.367', '1.367', '2.000']]>> Computing:  90%|█████████ | 9/10 [ 3.03it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]>> Computing: 100%|██████████| 10/10 [ 3.14it/s, batch_shape=[1, 512, 512, 228], voxelspacing=['0.977', '0.977', '2.000']]                                                                                                                          >>> /home/scur1628/ai4mi_project_group8/results/segthor_baseline/stitched_pred
+3d_dice [0.99851465 0.36529315 0.83413905 0.791191   0.7630585 ]
+3d_hd95 [ 1.8292532 39.971336  12.224075   7.490617  21.90842  ]
+3d_hd [ 39.964115 131.59268   31.802967  36.353992  61.80074 ]
+3d_assd [ 0.29235214 21.67706     4.5925856   1.7027363   4.145995  ]
+3d_nsd [0.94877976 0.27129096 0.35097495 0.64097565 0.4962321 ]
+3d_jaccard [0.99703634 0.2432445  0.73782593 0.6574389  0.6247525 ]
 
 JOB STATISTICS
 ==============
-Job ID: 15101787
+Job ID: 15102293
 Cluster: snellius
-User/Group: scur1051/scur1051
+User/Group: scur1628/scur1628
 State: RUNNING
 Nodes: 1
 Cores per node: 18
 CPU Utilized: 00:00:00
-CPU Efficiency: 0.00% of 00:08:24 core-walltime
-Job Wall-clock time: 00:00:28
+CPU Efficiency: 0.00% of 00:08:42 core-walltime
+Job Wall-clock time: 00:00:29
 Memory Utilized: 0.00 MB
 Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
 WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.
