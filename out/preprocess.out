@@ -1,0 +1,32 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Copied train: GT from data/SEGTHOR_CLEAN_OFFICIAL/train/gt and IMG from data/SEGTHOR_CLEAN_OFFICIAL/train/preprocessed_window_gamma_blended_laplacian_clahe to data/SEGTHOR_PREPROCESSED_WINDOW_GAMMA_BLENDED_LAPLACIAN_CLAHE/train
+Copied val: GT from data/SEGTHOR_CLEAN_OFFICIAL/val/gt and IMG from data/SEGTHOR_CLEAN_OFFICIAL/val/preprocessed_window_gamma_blended_laplacian_clahe to data/SEGTHOR_PREPROCESSED_WINDOW_GAMMA_BLENDED_LAPLACIAN_CLAHE/val
+Done! Preprocessed dataset available at: data/SEGTHOR_PREPROCESSED_WINDOW_GAMMA_BLENDED_LAPLACIAN_CLAHE
+
+JOB STATISTICS
+==============
+Job ID: 15136946
+Cluster: snellius
+User/Group: scur1007/scur1007
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:05
+CPU Efficiency: 0.84% of 00:09:54 core-walltime
+Job Wall-clock time: 00:00:33
+Memory Utilized: 7.73 MB
+Memory Efficiency: 0.01% of 64.00 GB (64.00 GB/node)

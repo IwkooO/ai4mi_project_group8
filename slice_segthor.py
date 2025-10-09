@@ -26,6 +26,7 @@ import pickle
 import random
 import argparse
 import warnings
+import preprocess as pp
 from pathlib import Path
 from functools import partial
 from multiprocessing import Pool
@@ -103,23 +104,26 @@ def slice_patient(id_: str, dest_path: Path, source_path: Path, shape: tuple[int
     else:
         gt = np.zeros_like(ct, dtype=np.uint8)
 
-    norm_ct: np.ndarray = norm_arr(ct)
+    raw_ct_uint8 = norm_arr(ct)  # Keep your old min-max normalization for raw
 
-    to_slice_ct = norm_ct
+    # Preprocessed volume
+    preproc_ct = pp.preprocess_ct_volume(ct, center=40, width=400, gamma=0.8)
+
     to_slice_gt = gt
 
     for idz in range(z):
-        img_slice = resize_(to_slice_ct[:, :, idz], shape).astype(np.uint8)
+        img_slice_raw = resize_(raw_ct_uint8[:, :, idz], shape).astype(np.uint8)
+        img_slice_pre = resize_(preproc_ct[:, :, idz], shape).astype(np.uint8)
         gt_slice = resize_(to_slice_gt[:, :, idz], shape, order=0).astype(np.uint8)
-        assert img_slice.shape == gt_slice.shape
+        assert img_slice_raw.shape == gt_slice.shape
         gt_slice *= 63
         assert gt_slice.dtype == np.uint8, gt_slice.dtype
         # assert set(np.unique(gt_slice)) <= set(range(5))
         assert set(np.unique(gt_slice)) <= set([0, 63, 126, 189, 252]), np.unique(gt_slice)
 
-        arrays: list[np.ndarray] = [img_slice, gt_slice]
-
-        subfolders: list[str] = ["img", "gt"]
+        arrays = [img_slice_raw, img_slice_pre, gt_slice]
+        subfolders = ["img", "preprocessed3D", "gt"]
+            
         assert len(arrays) == len(subfolders)
         for save_subfolder, data in zip(subfolders,
                                         arrays):
