@@ -13,6 +13,7 @@ the 'module load <package__name>' command. If you are uncertain if a package is
 already available 
 on the system, please use 'module avail' or 'module spider' to search for it.
 ============================================================================================== 
+/var/spool/slurm/slurmd/job15136923/slurm_script: line 14: cd: /home/scur1049/ai4mi_project_group8: Permission denied
 AFF=array([[  0.89100652,   0.4539905 ,   0.        ,   1.8850521 ],
        [ -0.4539905 ,   0.89100652,   0.        , 159.58681857],
        [  0.        ,   0.        ,   1.        ,  15.        ],
@@ -111,31 +112,31 @@ Namespace(source_dir=PosixPath('data/segthor_train'), dest_dir=PosixPath('data/s
  PosixPath('data/segthor_train/train/Patient_34/GT.nii.gz'),
  PosixPath('data/segthor_train/train/Patient_12/Patient_12.nii.gz'),
  PosixPath('data/segthor_train/train/Patient_12/GT.nii.gz')]
-  0%|          | 0/81 [?it/s]100%|██████████| 81/81 [1953.60it/s]
-Namespace(source_dir='data/segthor_fixed', dest_dir='data/SEGTHOR_CLEAN_tmp', shape=[256, 256], retains=5, seed=0, fold=0, process=-1)
+  0%|          | 0/81 [?it/s]100%|██████████| 81/81 [2566.82it/s]
+mv: cannot move 'data/segthor_fixed_tmp' to 'data/segthor_fixed/segthor_fixed_tmp': File exists
+Namespace(source_dir='data/segthor_fixed', dest_dir='data/SEGTHOR_CLEAN_OFFICIAL', shape=[256, 256], retains=10, seed=0, fold=0, process=-1)
 Founds 40 in the id list
 ['Patient_01', 'Patient_02', 'Patient_03', 'Patient_04', 'Patient_05', 'Patient_06', 'Patient_07', 'Patient_08', 'Patient_09', 'Patient_10']
 Founds 0 test ids
 []
-Slicing 35 pairs to data/SEGTHOR_CLEAN_tmp/train
-  0%|          | 0/35 [?it/s]  3%|▎         | 1/35 [ 4.03it/s]100%|██████████| 35/35 [138.10it/s]
-Slicing 5 pairs to data/SEGTHOR_CLEAN_tmp/val
-  0%|          | 0/5 [?it/s] 20%|██        | 1/5 [ 3.33it/s]100%|██████████| 5/5 [16.36it/s]
-Slicing 0 pairs to data/SEGTHOR_CLEAN_tmp/test
+Slicing 30 pairs to data/SEGTHOR_CLEAN_OFFICIAL/train
+  0%|          | 0/30 [?it/s]  3%|▎         | 1/30 [ 1.99it/s]100%|██████████| 30/30 [59.38it/s]
+Slicing 10 pairs to data/SEGTHOR_CLEAN_OFFICIAL/val
+  0%|          | 0/10 [?it/s] 10%|█         | 1/10 [ 1.93it/s]100%|██████████| 10/10 [19.22it/s]
+Slicing 0 pairs to data/SEGTHOR_CLEAN_OFFICIAL/test
 |          | 0/0 [?it/s]|          | 0/0 [?it/s]
-Saved spacing dictionnary to <_io.BufferedWriter name='data/SEGTHOR_CLEAN_tmp/spacing.pkl'>
+Saved spacing dictionnary to <_io.BufferedWriter name='data/SEGTHOR_CLEAN_OFFICIAL/spacing.pkl'>
 
 JOB STATISTICS
 ==============
-Job ID: 15070989
+Job ID: 15136923
 Cluster: snellius
-User/Group: scur1049/scur1049
-State: RUNNING
+User/Group: scur1007/scur1007
+State: COMPLETED (exit code 0)
 Nodes: 1
-Cores per node: 16
-CPU Utilized: 00:00:00
-CPU Efficiency: 0.00% of 00:49:04 core-walltime
-Job Wall-clock time: 00:03:04
-Memory Utilized: 0.00 MB
-Memory Efficiency: 0.00% of 64.00 GB (64.00 GB/node)
-WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.
+Cores per node: 9
+CPU Utilized: 00:10:34
+CPU Efficiency: 61.26% of 00:17:15 core-walltime
+Job Wall-clock time: 00:01:55
+Memory Utilized: 3.92 GB
+Memory Efficiency: 6.53% of 60.00 GB (60.00 GB/node)
