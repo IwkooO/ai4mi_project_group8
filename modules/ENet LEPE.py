@@ -61,7 +61,7 @@ class MixFFN(nn.Module):
 
 class MHSASR(nn.Module):
         """ Multi-Head Self-Attention with Spatial Reduction """
-        def __init__(self,dim,heads=4,sr_ratio=2,dropout=0.0):
+        def __init__(self,dim,heads=4,sr_ratio=2,dropout=0.0,lepe=True):
                 super().__init__()
                 self.h = heads
                 self.q = nn.Linear(dim,dim)
@@ -69,10 +69,14 @@ class MHSASR(nn.Module):
                 self.proj= nn.Linear(dim,dim)
                 self.dropout = nn.Dropout(dropout)
                 self.sr_ratio = sr_ratio
+                self.lepe = lepe # local positional encoding
                 if sr_ratio > 1:
                         # depthwise reduce tokens spatially before making K,V
                         self.sr = nn.Conv2d(dim, dim, kernel_size=sr_ratio, stride=sr_ratio, groups=dim)
                         self.norm = nn.LayerNorm(dim)
+                if self.lepe:
+                        self.lepe_dw = nn.Conv2d(dim, dim, kernel_size=3, padding=1, groups=dim, bias=False)
+
         def forward(self, x: Tensor, H: int, W: int) -> Tensor:
                 B, N, C = x.shape
                 d = C // self.h # dimension per head
@@ -92,6 +96,11 @@ class MHSASR(nn.Module):
                 attn = self.dropout(attn)
 
                 out = (attn @ v).transpose(1, 2).reshape(B, N, C)
+
+                if self.lepe:
+                        x_hw = x.transpose(1, 2).reshape(B, C, H, W)    # B,C,H,W
+                        pe = self.lepe_dw(x_hw).flatten(2).transpose(1, 2)  # B,N,C
+                        out = out + pe
                 out = self.proj(out)
                 return out
 

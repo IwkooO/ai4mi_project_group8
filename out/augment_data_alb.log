@@ -1,0 +1,87 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Collecting opencv-python
+  Downloading opencv_python-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (19 kB)
+Collecting numpy<2.3.0,>=2 (from opencv-python)
+  Downloading numpy-2.2.6-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+Downloading opencv_python-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (67.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 67.0/67.0 MB 64.2 MB/s  0:00:01
+Downloading numpy-2.2.6-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.8/16.8 MB 31.0 MB/s  0:00:00
+Installing collected packages: numpy, opencv-python
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.3.3
+    Uninstalling numpy-2.3.3:
+      Successfully uninstalled numpy-2.3.3
+
+Successfully installed numpy-2.2.6 opencv-python-4.12.0.88
+Collecting albumentations[imgaug]
+  Downloading albumentations-2.0.8-py3-none-any.whl.metadata (43 kB)
+WARNING: albumentations 2.0.8 does not provide the extra 'imgaug'
+Requirement already satisfied: numpy>=1.24.4 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from albumentations[imgaug]) (2.2.6)
+Requirement already satisfied: scipy>=1.10.0 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from albumentations[imgaug]) (1.16.2)
+Requirement already satisfied: PyYAML in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from albumentations[imgaug]) (6.0.3)
+Requirement already satisfied: pydantic>=2.9.2 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from albumentations[imgaug]) (2.11.10)
+Collecting albucore==0.0.24 (from albumentations[imgaug])
+  Downloading albucore-0.0.24-py3-none-any.whl.metadata (5.3 kB)
+Collecting opencv-python-headless>=4.9.0.80 (from albumentations[imgaug])
+  Downloading opencv_python_headless-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (19 kB)
+Collecting stringzilla>=3.10.4 (from albucore==0.0.24->albumentations[imgaug])
+  Downloading stringzilla-4.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl.metadata (105 kB)
+Collecting simsimd>=5.9.2 (from albucore==0.0.24->albumentations[imgaug])
+  Downloading simsimd-6.5.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (70 kB)
+WARNING: albumentations 2.0.8 does not provide the extra 'opencv'
+Requirement already satisfied: annotated-types>=0.6.0 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from pydantic>=2.9.2->albumentations[imgaug]) (0.7.0)
+Requirement already satisfied: pydantic-core==2.33.2 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from pydantic>=2.9.2->albumentations[imgaug]) (2.33.2)
+Requirement already satisfied: typing-extensions>=4.12.2 in /home/scur1049/.local/lib/python3.11/site-packages (from pydantic>=2.9.2->albumentations[imgaug]) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.0 in /home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages (from pydantic>=2.9.2->albumentations[imgaug]) (0.4.2)
+Downloading albumentations-2.0.8-py3-none-any.whl (369 kB)
+Downloading albucore-0.0.24-py3-none-any.whl (15 kB)
+Downloading opencv_python_headless-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (54.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 54.0/54.0 MB 34.3 MB/s  0:00:01
+Downloading simsimd-6.5.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (1.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 40.9 MB/s  0:00:00
+Downloading stringzilla-4.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl (515 kB)
+Installing collected packages: simsimd, stringzilla, opencv-python-headless, albucore, albumentations
+
+Successfully installed albucore-0.0.24 albumentations-2.0.8 opencv-python-headless-4.12.0.88 simsimd-6.5.3 stringzilla-4.1.0
+/home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages/albumentations/core/validation.py:114: UserWarning: ShiftScaleRotate is a special case of Affine transform. Please use Affine transform instead.
+  original_init(self, **validated_kwargs)
+/gpfs/home3/scur1049/ai4mi_project_group8/data_augmentation_alb.py:19: UserWarning: Argument(s) 'alpha_affine' are not valid for transform ElasticTransform
+  "elastic": A.ElasticTransform(alpha=1, sigma=50, alpha_affine=50, p=1),
+/home/scur1049/.conda/envs/ai4mi_env/lib/python3.11/site-packages/albumentations/core/validation.py:114: UserWarning: This augmenter is very slow. Try to use ``ElasticTransform`` instead, which is at least 10x faster.
+  original_init(self, **validated_kwargs)
+/gpfs/home3/scur1049/ai4mi_project_group8/data_augmentation_alb.py:32: UserWarning: Argument(s) 'max_holes, max_height, max_width' are not valid for transform CoarseDropout
+  "coarse_dropout": A.CoarseDropout(max_holes=8, max_height=32, max_width=32, p=1),
+Copying validation set data/SEGTHOR_CLEAN/val -> data/SEGTHOR_CLEAN_AUG_ALB/val
+
+=== Data augmentation completed ===
+Data augmentation complete for dataset SEGTHOR_CLEAN_AUG_ALB
+
+JOB STATISTICS
+==============
+Job ID: 15178460
+Cluster: snellius
+User/Group: scur1049/scur1049
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 01:52:30 core-walltime
+Job Wall-clock time: 00:06:15
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 8.00 GB (8.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.

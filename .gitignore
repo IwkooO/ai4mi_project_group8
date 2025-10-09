@@ -6,5 +6,5 @@ volumes/
 ai4mi/
 __pycache__/
 .env
-/wandb/
 projects
+wandb/
