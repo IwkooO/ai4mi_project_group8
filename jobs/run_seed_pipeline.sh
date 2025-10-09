@@ -37,7 +37,7 @@ export OPENBLAS_NUM_THREADS=2
 
 EXPERIMENT_NAME="${BASE_EXPERIMENT_NAME}_seed${SEED}"
 RESULTS_DIR="$(pwd)/results/${EXPERIMENT_NAME}"
-PRED_DIR="$(pwd)/data/seghtor_predictions_${SEED}_transformer"
+PRED_DIR="$(pwd)/data/seghtor_predictions_${EXPERIMENT_NAME}${SEED}"
 GT_DIR="${PRED_DIR}/gt"
 PRED_FOLDER="${PRED_DIR}/pred"
 
@@ -52,7 +52,7 @@ echo "Pred Dir:   ${PRED_DIR}"
 # Step 1: Train
 ####################################
 python -O main.py \
-  --dataset SEGTHOR_CLEAN \
+  --dataset SEGTHOR_PREPROCESSED \
   --run_name "${EXPERIMENT_NAME}" \
   --mode full \
   --epochs 75 \

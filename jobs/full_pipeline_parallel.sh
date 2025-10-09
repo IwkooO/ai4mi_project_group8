@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64GB
 #SBATCH --time=03:00:00
-#SBATCH --output=out/full_pipeline_parallel.log
+#SBATCH --output=out/full_pipeline_parallel_preprocess+arch.log
 
 module load 2023
 module load Anaconda3/2023.07-2
@@ -19,8 +19,19 @@ export OMP_NUM_THREADS=2
 export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
-BASE_EXPERIMENT_NAME="TransUNet-Mid-75$(date +%Y%m%d_%H%M%S)"
+BASE_EXPERIMENT_NAME="preprocess_arch$(date +%Y%m%d_%H%M%S)"
 SEEDS=(1 2 3)
+
+####################################
+# Pre-process the data
+####################################
+
+make data/SEGTHOR_PREPROCESSED
+
+python -O slice_segthor.py --source_dir data/segthor_fixed --dest_dir data/SEGTHOR_PREPROCESSED \
+        --shape 256 256 --retain 10 -p -1
+
+####################################
 
 echo "Submitting separate sbatch jobs for seeds: ${SEEDS[*]}"
 for SEED in "${SEEDS[@]}"; do

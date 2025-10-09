@@ -31,7 +31,6 @@ from operator import itemgetter
 from shutil import copytree, rmtree
 
 import torch
-from torch_optimizer import Ranger
 import numpy as np
 import torch.nn.functional as F
 from torch import nn, Tensor
@@ -67,6 +66,7 @@ datasets_params: dict[str, dict[str, Any]] = {}
 datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2, 'kernels': 8, 'factor': 2}
 datasets_params["SEGTHOR"] = {'K': 5, 'net': TransUNet2D, 'B': 8, 'kernels': 8, 'factor': 2}
 datasets_params["SEGTHOR_CLEAN"] = {'K': 5, 'net': TransUNet2D, 'B': 8, 'kernels': 8, 'factor': 2}
+datasets_params["SEGTHOR_PREPROCESSED"] = datasets_params["SEGTHOR_CLEAN"]
 
 def img_transform(img):
         img = img.convert('L')
