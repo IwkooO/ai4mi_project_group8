@@ -65,8 +65,8 @@ datasets_params: dict[str, dict[str, Any]] = {}
 # K for the number of classes
 # Avoids the classes with C (often used for the number of Channel)
 datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2, 'kernels': 8, 'factor': 2}
-datasets_params["SEGTHOR"] = {'K': 5, 'net': TransUNet2D, 'B': 128, 'kernels': 8, 'factor': 2}
-datasets_params["SEGTHOR_CLEAN"] = {'K': 5, 'net': TransUNet2D, 'B': 128, 'kernels': 8, 'factor': 2}
+datasets_params["SEGTHOR"] = {'K': 5, 'net': TransUNet2D, 'B': 8, 'kernels': 8, 'factor': 2}
+datasets_params["SEGTHOR_CLEAN"] = {'K': 5, 'net': TransUNet2D, 'B': 8, 'kernels': 8, 'factor': 2}
 
 def img_transform(img):
         img = img.convert('L')
@@ -137,7 +137,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
         net.init_weights()
     net.to(device)
 
-    lr = 0.005
+    lr = 0.0005
     optimizer = torch.optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999))
     #optimizer = torch.optim.AdamW(net.parameters(), lr=lr, betas=(0.9, 0.999), weight_decay=0.01)
     # optimizer = Ranger(
