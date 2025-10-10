@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64GB
 #SBATCH --time=03:00:00
-#SBATCH --output=out/full_pipeline_parallel_preprocess+arch.log
+#SBATCH --output=out/full_pipeline_parallel_FINAL_preprocess_transUnet_adam.log
 
 module load 2023
 module load Anaconda3/2023.07-2
@@ -19,7 +19,7 @@ export OMP_NUM_THREADS=2
 export MKL_NUM_THREADS=2
 export OPENBLAS_NUM_THREADS=2
 
-BASE_EXPERIMENT_NAME="preprocess_arch$(date +%Y%m%d_%H%M%S)"
+BASE_EXPERIMENT_NAME="FINAL_preprocess_transUnet_adam$(date +%Y%m%d_%H%M%S)"
 SEEDS=(1 2 3)
 
 ####################################
