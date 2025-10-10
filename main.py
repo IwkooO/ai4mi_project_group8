@@ -139,7 +139,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
 
     lr = 0.0005
     optimizer = torch.optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999))
-    #optimizer = torch.optim.AdamW(net.parameters(), lr=lr, betas=(0.9, 0.999), weight_decay=0.01)
+    # optimizer = torch.optim.AdamW(net.parameters(), lr=lr, betas=(0.9, 0.999), weight_decay=0.01)
     # optimizer = Ranger(
     #     net.parameters(),
     #     lr=lr,
