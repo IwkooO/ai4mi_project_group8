@@ -25,16 +25,21 @@
 
 from torch import einsum
 
+from regularizers import reg_l1w, reg_l2w
 from utils import simplex, sset
 
 
 class CrossEntropy():
-    def __init__(self, **kwargs):
+    def __init__(self, idk=None, reg_fn=None, reg_weight=0.0):
         # Self.idk is used to filter out some classes of the target mask. Use fancy indexing
-        self.idk = kwargs['idk']
-        print(f"Initialized {self.__class__.__name__} with {kwargs}")
+        if idk is None or len(idk) == 0:
+            raise ValueError("`idk` must be a non-empty sequence of class indices.")
+        self.idk = idk
+        self.reg_fn = reg_fn
+        self.reg_weight = reg_weight
+        print(f"Initialized {self.__class__.__name__} with {self.idk=}, {self.reg_fn=}, {self.reg_weight=}")
 
-    def __call__(self, pred_softmax, weak_target):
+    def __call__(self, pred_softmax, weak_target, net=None):
         assert pred_softmax.shape == weak_target.shape
         assert simplex(pred_softmax)
         assert sset(weak_target, [0, 1])
@@ -45,9 +50,16 @@ class CrossEntropy():
         loss = - einsum("bkwh,bkwh->", mask, log_p)
         loss /= mask.sum() + 1e-10
 
+        if self.reg_fn is not None and self.reg_weight > 0:
+            if self.reg_fn in [reg_l1w, reg_l2w]:
+                reg_term = self.reg_fn(net=net)
+            else:
+                reg_term = self.reg_fn(probs=pred_softmax, target=weak_target, idk=self.idk)
+            loss = loss + self.reg_weight * reg_term
+
         return loss
 
 
 class PartialCrossEntropy(CrossEntropy):
-    def __init__(self, **kwargs):
-        super().__init__(idk=[1], **kwargs)
+    def __init__(self, reg_fn=None, reg_weight=0.0):
+        super().__init__(idk=[1], reg_fn=reg_fn, reg_weight=reg_weight)

@@ -58,6 +58,14 @@ from utils import (Dcm,
 
 from losses import (CrossEntropy)
 
+from regularizers import (
+    reg_ce_focal,
+    reg_l1w,
+    reg_l2w,
+    reg_kl_uniform,
+    reg_tv,
+)
+
 datasets_params: dict[str, dict[str, Any]] = {}
 # K for the number of classes
 # Avoids the classes with C (often used for the number of Channel)
@@ -87,7 +95,7 @@ def worker_init_fn(worker_id):
     """Initialize worker with deterministic seed for reproducibility"""
     np.random.seed(torch.initial_seed() % 2**32)
 
-def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
+def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int, Any]:
     # Set random seeds for reproducibility
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -110,6 +118,8 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
 
     lr = 0.0005
     optimizer = torch.optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999))
+
+    regularizer = args.regularizer
 
     # Dataset part
     B: int = datasets_params[args.dataset]['B']
@@ -157,19 +167,29 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
             "num_classes": K,
             "architecture": datasets_params[args.dataset]['net'].__name__,
             "kernels": kernels,
-            "factor": factor
+            "factor": factor,
+            "regularizer": regularizer,
         }
     )
 
-    return (net, optimizer, device, train_loader, val_loader, K)
+    return (net, optimizer, device, train_loader, val_loader, K, regularizer)
 
 
 def runTraining(args):
     print(f">>> Setting up to train on {args.dataset} with {args.mode}")
-    net, optimizer, device, train_loader, val_loader, K = setup(args)
+    net, optimizer, device, train_loader, val_loader, K, regularizer = setup(args)
+
 
     if args.mode == "full":
-        loss_fn = CrossEntropy(idk=list(range(K)))  # Supervise both background and foreground
+        if regularizer == 'reg_ce_focal':
+            loss_fn = CrossEntropy(reg_fn=reg_ce_focal, reg_weight=1.0, idk=list(range(K)))
+        elif regularizer == 'reg_l1w':
+            loss_fn = CrossEntropy(reg_fn=reg_l1w, reg_weight=1e-5, idk=list(range(K)))
+        elif regularizer == 'reg_l2w':
+            loss_fn = CrossEntropy(reg_fn=reg_l2w, reg_weight=1e-5, idk=list(range(K)))
+        else:
+            loss_fn = CrossEntropy(idk=list(range(K)), reg_fn=None, reg_weight=0.0)  # Supervise both background and foreground
+        
     elif args.mode in ["partial"] and args.dataset == 'SEGTHOR':
         loss_fn = CrossEntropy(idk=[0, 1, 3, 4])  # Do not supervise the heart (class 2)
     else:
@@ -224,7 +244,7 @@ def runTraining(args):
                     pred_seg = probs2one_hot(pred_probs)
                     log_dice[e, j:j + B, :] = dice_coef(pred_seg, gt)  # One DSC value per sample and per class
 
-                    loss = loss_fn(pred_probs, gt)
+                    loss = loss_fn(pred_probs, gt, net=net)
                     log_loss[e, i] = loss.item()  # One loss value per batch (averaged in the loss)
 
                     if opt:  # Only for training
@@ -306,6 +326,14 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logics around epochs and logging easily.")
+    parser.add_argument('--regularizer', type=str, default='none', choices=['none', 
+                                                                            'reg_ce_focal',
+                                                                            'reg_l1w',
+                                                                            'reg_l2w',
+                                                                            'reg_kl_uniform',
+                                                                            'reg_tv',
+                                                                            ],
+                        help="The type of regularization in the model.")
 
     args = parser.parse_args()
 
