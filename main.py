@@ -64,6 +64,7 @@ from regularizers import (
     reg_l2w,
     reg_kl_uniform,
     reg_tv,
+    reg_surface_sdf,
 )
 
 datasets_params: dict[str, dict[str, Any]] = {}
@@ -187,6 +188,12 @@ def runTraining(args):
             loss_fn = CrossEntropy(reg_fn=reg_l1w, reg_weight=1e-5, idk=list(range(K)))
         elif regularizer == 'reg_l2w':
             loss_fn = CrossEntropy(reg_fn=reg_l2w, reg_weight=1e-5, idk=list(range(K)))
+        elif regularizer == 'reg_kl_uniform':
+            loss_fn = CrossEntropy(reg_fn=reg_kl_uniform, reg_weight=1e-3, idk=list(range(K)))
+        elif regularizer == 'reg_tv':
+            loss_fn = CrossEntropy(reg_fn=reg_tv, reg_weight=1e-3, idk=list(range(K)))
+        elif regularizer == 'reg_surface_sdf':
+            loss_fn = CrossEntropy(reg_fn=reg_surface_sdf, reg_weight=1.0, idk=list(range(K)))
         else:
             loss_fn = CrossEntropy(idk=list(range(K)), reg_fn=None, reg_weight=0.0)  # Supervise both background and foreground
         
@@ -332,6 +339,7 @@ def main():
                                                                             'reg_l2w',
                                                                             'reg_kl_uniform',
                                                                             'reg_tv',
+                                                                            'reg_surface_sdf'
                                                                             ],
                         help="The type of regularization in the model.")
 
