@@ -14,16 +14,15 @@
 set -euo pipefail
 
 # choose seed and mode here (LCC, morphology, LCC+morphology)
-SEED=3
-mode=LCC
+SEED=1
 
 # create log directory and redirect stdout/stderr
 mkdir -p slurm_out
-exec >"slurm_out/postprocess_metrics_${mode}_${SEED}.out" 2>"slurm_out/postprocess_metrics_${mode}_${SEED}.err"
+exec >"slurm_out/postprocess_metrics_${SEED}.out" 2>"slurm_out/postprocess_metrics__${SEED}.err"
 
 
 PROJECT="$HOME/ai4mi_project_group8"
-RESULTS_DIR="$PROJECT/results/experiment_${mode}_seed${SEED}"
+RESULTS_DIR="$PROJECT/results/experiment_seed${SEED}"
 
 # RESULTS_DIR="$PROJECT/results/experiment_20251007_011801_seed${SEED}"
 # RESULTS_DIR="$PROJECT/results/experiment_20251007_143235_seed${SEED}"

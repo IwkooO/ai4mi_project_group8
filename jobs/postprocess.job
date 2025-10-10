@@ -1,0 +1,86 @@
+#!/bin/bash
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=01:00:00
+#SBATCH --job-name=postprocess_metrics_both
+
+set -euo pipefail
+
+# choose seed and mode here
+SEED=3       # options: 1 | 2 | 3
+MODE=morph   # options: lcc | morph | lcc+morph
+
+# logs per mode/seed
+mkdir -p slurm_out
+exec >"slurm_out/postprocess_metrics_${MODE}_${SEED}.out" 2>"slurm_out/postprocess_metrics_${MODE}_${SEED}.err"
+
+PROJECT="$HOME/ai4mi_project_group8"
+
+# stitched predictions in, post-processed out
+PRED_IN="$PROJECT/data/seghtor_predictions_${SEED}/pred"
+PRED_POST="$PROJECT/data/seghtor_predictions_${SEED}/pred_post_${MODE}"
+
+# GT handling + metrics output
+GT_DIR="$PROJECT/data/seghtor_predictions_${SEED}/gt"
+GT_SOURCE="$PROJECT/data/segthor_fixed/train"
+RESULTS_DIR="$PROJECT/results/experiment_${MODE}_seed${SEED}"
+METRICS_OUT="${RESULTS_DIR}/metrics_post_${MODE}"
+
+echo "PROJECT      : ${PROJECT}"
+echo "MODE         : ${MODE}"
+echo "PRED_IN      : ${PRED_IN}"
+echo "PRED_POST    : ${PRED_POST}"
+echo "GT_DIR       : ${GT_DIR}"
+echo "GT_SOURCE    : ${GT_SOURCE}"
+echo "METRICS_OUT  : ${METRICS_OUT}"
+
+module load 2023
+module load Anaconda3/2023.07-2
+mkdir -p "${PRED_POST}" "${GT_DIR}" "${METRICS_OUT}"
+
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate ai4mi_env
+
+export OMP_NUM_THREADS=2
+export MKL_NUM_THREADS=2
+export OPENBLAS_NUM_THREADS=2
+
+# 1) Post-process predictions (LCC + Morph when MODE=both)
+echo "==> Post-processing predictions (${MODE})"
+python postprocess.py \
+  --in_folder  "${PRED_IN}" \
+  --out_folder "${PRED_POST}" \
+  --num_classes 5 \
+  --mode "${MODE}"
+
+# 2) Prepare matching GT subset (copy only those patients we predicted)
+echo "==> Preparing GT subset"
+count=0
+for pred_file in "${PRED_POST}"/*.nii.gz; do
+  [ -e "$pred_file" ] || continue
+  patient=$(basename "$pred_file" .nii.gz)
+  src="${GT_SOURCE}/${patient}/GT.nii.gz"
+  if [ -f "$src" ]; then
+    cp -f "$src" "${GT_DIR}/${patient}.nii.gz"
+    count=$((count+1))
+  else
+    echo "[WARN] Missing GT for ${patient} at ${src}"
+  fi
+done
+echo "Copied ${count} GT volumes into ${GT_DIR}"
+
+# 3) Compute metrics on post-processed predictions
+echo "==> Computing metrics (${MODE})"
+python compute_metrics.py \
+  --ref_folder "${GT_DIR}" \
+  --pred_folder "${PRED_POST}" \
+  --ref_extension .nii.gz \
+  --pred_extension .nii.gz \
+  --num_classes 5 \
+  --metrics 3d_dice 3d_hd95 3d_hd 3d_assd 3d_nsd 3d_jaccard \
+  --save_folder "${METRICS_OUT}" \
+  --overwrite
+
+echo "==> Done. Metrics saved in: ${METRICS_OUT}"

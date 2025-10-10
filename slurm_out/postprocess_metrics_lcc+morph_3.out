@@ -1,0 +1,60 @@
+PROJECT      : /home/scur1628/ai4mi_project_group8
+MODE         : lcc+morph
+PRED_IN      : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred
+PRED_POST    : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph
+GT_DIR       : /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt
+GT_SOURCE    : /home/scur1628/ai4mi_project_group8/data/segthor_fixed/train
+METRICS_OUT  : /home/scur1628/ai4mi_project_group8/results/experiment_lcc+morph_seed3/metrics_post_lcc+morph
+==> Post-processing predictions (lcc+morph)
+Found 10 volumes in /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred
+Running mode: lcc+morph
+Processing Patient_01.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_01.nii.gz
+Processing Patient_02.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_02.nii.gz
+Processing Patient_13.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_13.nii.gz
+Processing Patient_16.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_16.nii.gz
+Processing Patient_21.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_21.nii.gz
+Processing Patient_22.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_22.nii.gz
+Processing Patient_28.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_28.nii.gz
+Processing Patient_30.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_30.nii.gz
+Processing Patient_35.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_35.nii.gz
+Processing Patient_39.nii.gz
+ Saved cleaned volume to: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph/Patient_39.nii.gz
+
+ Done! Post-processed volumes saved in: /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph
+==> Preparing GT subset
+Copied 10 GT volumes into /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt
+==> Computing metrics (lcc+morph)
+{'background_class': 0,
+ 'chill': False,
+ 'cpu': False,
+ 'crop': False,
+ 'ignored_classes': None,
+ 'metrics': ['3d_dice', '3d_hd95', '3d_hd', '3d_assd', '3d_nsd', '3d_jaccard'],
+ 'num_classes': 5,
+ 'num_workers': 9,
+ 'overwrite': True,
+ 'pred_extension': '.nii.gz',
+ 'pred_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph'),
+ 'ref_extension': '.nii.gz',
+ 'ref_folder': PosixPath('/home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt'),
+ 'save_folder': PosixPath('/home/scur1628/ai4mi_project_group8/results/experiment_lcc+morph_seed3/metrics_post_lcc+morph')}
+[34m>>> Initializing Volume dataset with 10 volumes[39m[49m
+>>  /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/gt, /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph
+[32m> All stems found in both folders[39m[49m
+>>> /home/scur1628/ai4mi_project_group8/data/seghtor_predictions_3/pred_post_lcc+morph
+3d_dice [0.9982289  0.47207204 0.8274905  0.7443703  0.77100575]
+3d_hd95 [ 2.1208155 23.74388   13.326474  10.171111  21.068142 ]
+3d_hd [32.07804  48.617165 22.283007 25.990063 50.23988 ]
+3d_assd [0.37148064 9.074715   5.3656716  2.528421   6.7900414 ]
+3d_nsd [0.9495239  0.36328217 0.31225196 0.60082877 0.51029426]
+3d_jaccard [0.99646854 0.32488382 0.7298672  0.6037466  0.64859974]
+==> Done. Metrics saved in: /home/scur1628/ai4mi_project_group8/results/experiment_lcc+morph_seed3/metrics_post_lcc+morph

@@ -1,53 +1,104 @@
+"""
+Post-processing for 3D segmentation masks
+
+Supports 3 modes:
+  --mode lcc      → Keep only Largest Connected Component (LCC)
+  --mode morph    → Apply morphological cleaning (opening + closing)
+  --mode lcc+morph    → Apply LCC first, then morphological cleaning
+"""
+
 import argparse
 from pathlib import Path
 import numpy as np
 import nibabel as nib
-from scipy.ndimage import label, generate_binary_structure
+from scipy.ndimage import (
+    label,
+    binary_opening,
+    binary_closing,
+    generate_binary_structure,
+)
 
-def largest_component(mask: np.ndarray) -> np.ndarray:
-    """Keep only the largest connected component of a binary mask"""
-    if mask.sum() == 0:
-        return mask
-    struct = generate_binary_structure(3, 2) 
-    labeled, n = label(mask, structure=struct)
-    if n == 1:
-        return mask
-    sizes = np.bincount(labeled.ravel())
-    sizes[0] = 0                  # ignore background
-    keep = sizes.argmax()         # largest non-background label
-    return labeled == keep
 
-def postprocess_labels(lbl: np.ndarray, K: int) -> np.ndarray:
-    """Apply LCC per class on a 3D label volume."""
-    out = np.zeros_like(lbl, dtype=np.uint8)
-    for c in range(1, K):         # skip background again
-        mask = lbl == c
-        mask = largest_component(mask)
-        out[mask] = c
-    return out
+def largest_connected_component(mask: np.ndarray) -> np.ndarray:
+    """Keep only the largest connected component in a binary mask"""
+    labeled, num = label(mask)
+    if num < 1:
+        return mask
+    # label of largest non-background component
+    largest = np.argmax(np.bincount(labeled.flat)[1:]) + 1
+    return (labeled == largest).astype(mask.dtype)
+
+
+def morphological_cleaning(mask: np.ndarray) -> np.ndarray:
+    """Apply small 3×3×3 morphological opening and closing"""
+    structure = generate_binary_structure(3, 1)
+    mask = binary_opening(mask, structure=structure)
+    mask = binary_closing(mask, structure=structure)
+    return mask.astype(np.uint8)
+
+
+def postprocess_volume(volume: np.ndarray, num_classes: int, mode: str) -> np.ndarray:
+    """Apply postprocessing per class according to selected mode"""
+    processed = np.zeros_like(volume, dtype=np.uint8)
+
+    for cls in range(1, num_classes):  # skip background
+        mask = (volume == cls)
+        if not np.any(mask):
+            continue
+
+        if mode == "lcc":
+            mask = largest_connected_component(mask)
+        elif mode == "morph":
+            mask = morphological_cleaning(mask)
+        elif mode == "lcc+morph":
+            mask = largest_connected_component(mask)
+            mask = morphological_cleaning(mask)
+        else:
+            raise ValueError(f"Unknown mode: {mode}. Choose from ['lcc', 'morph', 'lcc+morph'].")
+
+        processed[mask > 0] = cls
+
+    return processed
+
 
 def main():
-    ap = argparse.ArgumentParser(description="Post-process predictions: Largest Connected Component per class")
-    ap.add_argument("--in_folder",  required=True, help="Input folder with stitched .nii.gz predictions")
-    ap.add_argument("--out_folder", required=True, help="Output folder for cleaned predictions")
-    ap.add_argument("--num_classes", type=int, default=5, help="Number of classes including background")
-    args = ap.parse_args()
+    parser = argparse.ArgumentParser(
+        description="3D post-processing (LCC, Morph, or Both)."
+    )
+    parser.add_argument("--in_folder", required=True, help="Folder with input .nii.gz volumes")
+    parser.add_argument("--out_folder", required=True, help="Folder to save post-processed volumes")
+    parser.add_argument("--num_classes", type=int, default=5, help="Number of classes (default=5)")
+    parser.add_argument(
+        "--mode",
+        type=str,
+        default="lcc+morph",
+        choices=["lcc", "morph", "lcc+morph"],
+        help="Postprocessing mode: lcc | morph | lcc+morph (default: lcc+morph)",
+    )
+
+    args = parser.parse_args()
 
     in_dir = Path(args.in_folder)
     out_dir = Path(args.out_folder)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    for f in sorted(in_dir.glob("*.nii.gz")):
-        print(f"[INFO] Processing {f.name}")
+    nii_files = sorted(in_dir.glob("*.nii.gz"))
+    print(f"Found {len(nii_files)} volumes in {in_dir}")
+    print(f"Running mode: {args.mode}")
+
+    for f in nii_files:
+        print(f"Processing {f.name}")
         nii = nib.load(str(f))
-        lbl = np.asanyarray(nii.get_fdata()).astype(np.uint8)
+        volume = nii.get_fdata().astype(np.uint8)
 
-        cleaned = postprocess_labels(lbl, K=args.num_classes)
+        processed = postprocess_volume(volume, args.num_classes, args.mode)
 
-        nib.save(
-            nib.Nifti1Image(cleaned, affine=nii.affine, header=nii.header),
-            str(out_dir / f.name)
-        )
+        post_nii = nib.Nifti1Image(processed, affine=nii.affine, header=nii.header)
+        nib.save(post_nii, out_dir / f.name)
+        print(f" Saved cleaned volume to: {out_dir / f.name}")
+
+    print(f"\n Done! Post-processed volumes saved in: {out_dir}")
+
 
 if __name__ == "__main__":
     main()
