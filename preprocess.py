@@ -41,7 +41,7 @@ def laplacian_2d(image: np.ndarray) -> np.ndarray:
 
 def preprocess_ct_volume(volume: np.ndarray, center: float = 60, width: float = 300, gamma: float = 0.8) -> np.ndarray:
     """
-    Full preprocessing pipeline: HU windowing + gamma correction.
+    Full preprocessing pipeline: HU windowing + gamma correction + blended laplacian and CLAHE.
     Input:
         volume: 3D CT volume in HU
     Output:
