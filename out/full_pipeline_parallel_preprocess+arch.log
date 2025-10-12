@@ -1,0 +1,75 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+make: Nothing to be done for 'data/SEGTHOR_PREPROCESSED'.
+Namespace(source_dir='data/segthor_fixed', dest_dir='data/SEGTHOR_PREPROCESSED', shape=[256, 256], retains=10, seed=0, fold=0, process=-1)
+Founds 40 in the id list
+['Patient_01', 'Patient_02', 'Patient_03', 'Patient_04', 'Patient_05', 'Patient_06', 'Patient_07', 'Patient_08', 'Patient_09', 'Patient_10']
+Founds 0 test ids
+[]
+Slicing 30 pairs to data/SEGTHOR_PREPROCESSED/train
+  0%|          | 0/30 [?it/s]  3%|▎         | 1/30 [ 3.35it/s]100%|██████████| 30/30 [100.23it/s]
+Slicing 10 pairs to data/SEGTHOR_PREPROCESSED/val
+  0%|          | 0/10 [?it/s] 10%|█         | 1/10 [ 3.28it/s]100%|██████████| 10/10 [32.74it/s]
+Slicing 0 pairs to data/SEGTHOR_PREPROCESSED/test
+|          | 0/0 [?it/s]|          | 0/0 [?it/s]
+Saved spacing dictionnary to <_io.BufferedWriter name='data/SEGTHOR_PREPROCESSED/spacing.pkl'>
+Submitting separate sbatch jobs for seeds: 1 2 3
+Submitting seed 1
+sbatch: Single-node jobs run on a shared node by default. Add --exclusive if you want to use a node exclusively.
+sbatch: A full node consists of 72 CPU cores, 491520 MiB of memory and 4 GPUs and can be shared by up to 4 jobs.
+sbatch: By default shared jobs get 6826 MiB of memory per CPU core, unless explicitly overridden with --mem-per-cpu, --mem-per-gpu or --mem.
+sbatch: You will be charged for 1 GPUs, based on the number of CPUs, GPUs and the amount memory that you've requested.
+Submitted batch job 15227565
+Submitting seed 2
+sbatch: Single-node jobs run on a shared node by default. Add --exclusive if you want to use a node exclusively.
+sbatch: A full node consists of 72 CPU cores, 491520 MiB of memory and 4 GPUs and can be shared by up to 4 jobs.
+sbatch: By default shared jobs get 6826 MiB of memory per CPU core, unless explicitly overridden with --mem-per-cpu, --mem-per-gpu or --mem.
+sbatch: You will be charged for 1 GPUs, based on the number of CPUs, GPUs and the amount memory that you've requested.
+Submitted batch job 15227566
+Submitting seed 3
+sbatch: Single-node jobs run on a shared node by default. Add --exclusive if you want to use a node exclusively.
+sbatch: A full node consists of 72 CPU cores, 491520 MiB of memory and 4 GPUs and can be shared by up to 4 jobs.
+sbatch: By default shared jobs get 6826 MiB of memory per CPU core, unless explicitly overridden with --mem-per-cpu, --mem-per-gpu or --mem.
+sbatch: You will be charged for 1 GPUs, based on the number of CPUs, GPUs and the amount memory that you've requested.
+Submitted batch job 15227567
+All seed jobs submitted. Monitor with: squeue -u scur1007
+
+JOB STATISTICS
+==============
+Job ID: 15227561
+Cluster: snellius
+User/Group: scur1007/scur1007
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:05:06
+CPU Efficiency: 42.50% of 00:12:00 core-walltime
+Job Wall-clock time: 00:00:45
+Memory Utilized: 1.64 GB
+Memory Efficiency: 2.56% of 64.00 GB (64.00 GB/node)

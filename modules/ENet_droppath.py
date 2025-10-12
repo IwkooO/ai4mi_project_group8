@@ -126,29 +126,13 @@ class ViTBlock(nn.Module):
                 return x
 
 class TransformerBottleneck(nn.Module):
-        """Goes into the deepest part of the ENet.
-
-        Added support for progressive stochastic depth via `drop_path_max`:
-        if drop_path_max>0 and depth>1, the residual branches in successive ViTBlocks
-        use linearly increasing drop probabilities from 0 -> drop_path_max.
-        """
-        def __init__(self, c_in, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4, drop_path_max: float | None = None):
+        """Goes into the deepest part of the ENet"""
+        def __init__(self, c_in, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4):
                 super().__init__()
 
                 self.patch = OverlapPatchEmbed(c_in, embed_dim, patch=patch, stride=patch)
-
-                # Determine per-block drop_path values
-                if drop_path_max is None:
-                        # Preserve previous behaviour (uniform 0.1 in each block)
-                        dpr = [0.1] * depth
-                else:
-                        if drop_path_max > 0 and depth > 1:
-                                dpr = torch.linspace(0, drop_path_max, steps=depth).tolist()
-                        else:
-                                dpr = [0.0] * depth
-
                 self.blocks = nn.ModuleList([
-                        ViTBlock(embed_dim, heads=heads, sr_ratio=sr_ratio, drop_path=dpr[i]) for i in range(depth)
+                        ViTBlock(embed_dim, heads=heads, sr_ratio=sr_ratio) for _ in range(depth)
                 ])
                 self.proj_back = nn.Conv2d(embed_dim, c_in, kernel_size=1, bias=False)
                 self.bn = nn.BatchNorm2d(c_in)
@@ -357,9 +341,7 @@ class ENet(nn.Module):
                 #         c_in=K*4, embed_dim=128, depth=1, heads=2, sr_ratio=4, patch=4)
 
                 # Main ViT block in the bottleneck
-                #self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4)
-                self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=192, depth=3, heads=6, sr_ratio=1, patch=2, drop_path_max=0.15)
-                ### END EXTENSION
+                self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4)
 
                 # Middle operations
                 self.bottleneck3 = nn.Sequential(BottleNeck(K * 8, K * 8, F, dropoutRate=0.1),

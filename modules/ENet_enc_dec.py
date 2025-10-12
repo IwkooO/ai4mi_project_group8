@@ -95,60 +95,27 @@ class MHSASR(nn.Module):
                 out = self.proj(out)
                 return out
 
-class DropPath(nn.Module):
-    """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
-    def __init__(self, drop_prob=None):
-        super(DropPath, self).__init__()
-        self.drop_prob = drop_prob
-
-    def forward(self, x):
-        if self.drop_prob == 0. or not self.training:
-            return x
-        keep_prob = 1 - self.drop_prob
-        shape = (x.shape[0],) + (1,) * (x.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets
-        random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)
-        random_tensor.floor_()  # binarize
-        output = x.div(keep_prob) * random_tensor
-        return output
-
 class ViTBlock(nn.Module):
-        def __init__(self, dim, heads=4, sr_ratio=2, mlp_ratio=4, dropout=0.0, drop_path=0.1):
+        def __init__(self, dim, heads=4, sr_ratio=2, mlp_ratio=4, dropout=0.0):
                 super().__init__()
                 self.n1 = nn.LayerNorm(dim)
                 self.attn = MHSASR(dim, heads=heads, sr_ratio=sr_ratio, dropout=dropout)
-                self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
                 self.n2 = nn.LayerNorm(dim)
                 self.ffn = MixFFN(dim, mlp_ratio=mlp_ratio)
 
         def forward(self, x, H, W):
-                x = x + self.drop_path(self.attn(self.n1(x), H, W))
-                x = x + self.drop_path(self.ffn(self.n2(x), H, W))
+                x = x + self.attn(self.n1(x), H, W)
+                x = x + self.ffn(self.n2(x), H, W)
                 return x
 
 class TransformerBottleneck(nn.Module):
-        """Goes into the deepest part of the ENet.
-
-        Added support for progressive stochastic depth via `drop_path_max`:
-        if drop_path_max>0 and depth>1, the residual branches in successive ViTBlocks
-        use linearly increasing drop probabilities from 0 -> drop_path_max.
-        """
-        def __init__(self, c_in, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4, drop_path_max: float | None = None):
+        """Goes into the deepest part of the ENet"""
+        def __init__(self, c_in, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4):
                 super().__init__()
 
                 self.patch = OverlapPatchEmbed(c_in, embed_dim, patch=patch, stride=patch)
-
-                # Determine per-block drop_path values
-                if drop_path_max is None:
-                        # Preserve previous behaviour (uniform 0.1 in each block)
-                        dpr = [0.1] * depth
-                else:
-                        if drop_path_max > 0 and depth > 1:
-                                dpr = torch.linspace(0, drop_path_max, steps=depth).tolist()
-                        else:
-                                dpr = [0.0] * depth
-
                 self.blocks = nn.ModuleList([
-                        ViTBlock(embed_dim, heads=heads, sr_ratio=sr_ratio, drop_path=dpr[i]) for i in range(depth)
+                        ViTBlock(embed_dim, heads=heads, sr_ratio=sr_ratio) for _ in range(depth)
                 ])
                 self.proj_back = nn.Conv2d(embed_dim, c_in, kernel_size=1, bias=False)
                 self.bn = nn.BatchNorm2d(c_in)
@@ -357,9 +324,7 @@ class ENet(nn.Module):
                 #         c_in=K*4, embed_dim=128, depth=1, heads=2, sr_ratio=4, patch=4)
 
                 # Main ViT block in the bottleneck
-                #self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4)
-                self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=192, depth=3, heads=6, sr_ratio=1, patch=2, drop_path_max=0.15)
-                ### END EXTENSION
+                self.trans_mid = TransformerBottleneck(c_in=K * 8, embed_dim=256, depth=2, heads=4, sr_ratio=2, patch=4)
 
                 # Middle operations
                 self.bottleneck3 = nn.Sequential(BottleNeck(K * 8, K * 8, F, dropoutRate=0.1),
