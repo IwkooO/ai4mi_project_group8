@@ -326,6 +326,46 @@ def runTraining(args):
             # Save model checkpoint to wandb
             wandb.save(str(args.dest / "bestweights.pt"))
 
+def runInference(net, device, args):
+    print(f">>> Setting up to run inference on {args.dataset}")
+    net.to(device)
+    net.eval()
+    K = datasets_params[args.dataset]['K']
+    B = datasets_params[args.dataset]['B']
+    root_dir = Path("data") / args.dataset
+
+    test_set = SliceDataset(
+        'test',
+        root_dir,
+        img_transform=img_transform,
+        gt_transform=lambda x: x,
+        debug=args.debug
+    )
+    test_loader = DataLoader(
+        test_set,
+        batch_size=B,
+        num_workers=5,
+        shuffle=False,
+        worker_init_fn=worker_init_fn,
+        generator=torch.Generator().manual_seed(args.seed)
+    )
+
+    out_dir = args.dest / "test"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    mult = 63 if K == 5 else (255 / (K - 1))
+
+    with torch.no_grad():
+        tq = tqdm_(test_loader, total=len(test_loader), desc=">> Testing")
+        for batch in tq:
+            img = batch['images'].to(device)          # [B, 1, H, W]
+            stems = batch['stems']                    # list[str]
+
+            logits = net(img)                         # [B, K, H, W]
+            probs = torch.softmax(logits, dim=1)
+            pred_cls = probs2class(probs)             # [B, 1, H, W] (class ids)
+            save_images(pred_cls * mult, stems, out_dir)
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -344,12 +384,21 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logics around epochs and logging easily.")
+    parser.add_argument('--inference_pkl', type=Path, default=None,
+                        help="Path to the .pkl of the model for inference.")
 
     args = parser.parse_args()
 
     pprint(args)
 
-    runTraining(args)
+    if args.inference_pkl is not None:
+        print(f">>> Running inference only, loading model from {args.inference_pkl}")
+        assert args.inference_pkl.exists(), args.inference_pkl
+        device = torch.device("cuda") if args.gpu and torch.cuda.is_available() else torch.device("cpu")
+        net = torch.load(args.inference_pkl, map_location=device, weights_only=False)
+        runInference(net, device, args)
+    else:
+        runTraining(args)
 
 
 if __name__ == '__main__':

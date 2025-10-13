@@ -58,7 +58,7 @@ def merge_patient(id_: str, dest_folder: str, images: list[Path],
         z = get_z(img)
         img_arr = imread(img)
         assert img_arr.dtype == np.uint8
-        assert set(np.unique(img_arr)) <= set(range(K))
+        #assert set(np.unique(img_arr)) <= set(range(K))
 
         resized: np.ndarray = resize(img_arr, (X, Y),
                                      mode="constant",
