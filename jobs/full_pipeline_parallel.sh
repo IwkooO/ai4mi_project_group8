@@ -26,8 +26,6 @@ SEEDS=(1 2 3)
 # Pre-process the data
 ####################################
 
-make data/SEGTHOR_PREPROCESSED
-
 python -O slice_segthor.py --source_dir data/segthor_fixed --dest_dir data/SEGTHOR_PREPROCESSED \
         --shape 256 256 --retain 10 -p -1
 
